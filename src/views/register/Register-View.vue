@@ -68,19 +68,15 @@ const user_name = ref('')
 const account = ref('')
 const password = ref('')
 const imgUrl = ref('')
-//获取upload组件的ref
-const upload = ref()
 
 //展示上传的头像
 function showAvatar(file: any) {
   imgUrl.value = URL.createObjectURL(file.raw)
 }
-
 //处理上传头像错误
 function handleAvatarError() {
-  ElMessage.error("用户名或账号已存在")
+  ElMessage.error('用户名或账号已存在')
 }
-
 //检查头像大小和类型
 function beforeAvatarUpload(file: any): boolean {
   //限制文件类型和大小
@@ -101,7 +97,6 @@ function beforeAvatarUpload(file: any): boolean {
   }
   return isJPG && isLt2M
 }
-
 //处理注册成功
 function handleAvatarSuccess(res: any) {
   const { data } = res
@@ -119,7 +114,6 @@ function handleAvatarSuccess(res: any) {
     offset: 80
   })
 }
-
 //检查用户是否已经完成信息填写
 function check(): boolean {
   if (!imgUrl.value) {
@@ -138,8 +132,8 @@ function check(): boolean {
 }
 //手动提交注册
 function register() {
-  //获取upload组件的ref
-  
+  //获取upload组件的同名ref
+  const upload = ref()
   //检查用户是否已经完成信息填写
   if (check()) upload.value.submit()
 }

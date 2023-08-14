@@ -3,8 +3,6 @@ import { computed } from 'vue';
 import { useRoute } from 'vue-router'
 import HeaderNav from './components/Header/Header-Nav.vue'
 
-
-
 //获取当前路由
 const currentRoute = useRoute()
 //是否展示Header的计算属性
