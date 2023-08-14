@@ -1,0 +1,14 @@
+/*负责初始化样式*/
+
+#app {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+*{
+  padding: 0;
+  margin: 0;
+}
