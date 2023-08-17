@@ -1,18 +1,46 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
-import type { getPostOption } from './post'
+import type { GetPostOption,Post } from './post'
 
+export interface User {
+  _id: string
+  user_name: string
+  account: string
+  password: string
+  avatar: string
+  favorites: Array<Post>
+  published: Array<Post>
+  follows: Array<MainUserInfo> //!注意,这边应该是经过阉割的user
+  fans: Array<MainUserInfo> //!注意,这边应该是经过阉割的user
+  register_time: string
+  time_stamp: number
+}
+
+export interface MainUserInfo{
+  _id: string
+  user_name: string
+  avatar:string
+}
+
+interface UserState {
+  user: User
+  otherUser: User
+  recentUsers: Array<User>
+  publishedTotal: number
+  favoritesTotal: number
+}
+//!可以考虑初始化获取一下用户信息
 export const useUserStore = defineStore('user', {
-  state: () => ({
-    user: {}, //指向当前用户
-    otherUser: {}, //指向当前浏览的其他用户
+  state: ():UserState => ({
+    user: {} as User, //指向当前用户
+    otherUser: {} as User, //指向当前浏览的其他用户
     recentUsers: [], //最近注册的所有用户
     publishedTotal: 0, //当前用户发布总数
     favoritesTotal: 0 //当前用户收藏总数
   }),
   actions: {
     //从服务器获取当前用户信息,并更新state
-    getUser(option?: getPostOption) {
+    getUser(option?: GetPostOption) {
       //检查是否有参数传入,没有就使用默认值
       //!这里是用来分页的逻辑,一定要注意,如果不传入参数,那么就是初始查询,不跳过
       //检查是否有参数传入,没有就使用默认值
@@ -70,7 +98,7 @@ export const useUserStore = defineStore('user', {
     },
     //更新用户信息
     //TODO: 这里的newUser类型需要改一下,接口约束
-    updateUser(newUser:any) {
+    updateUser(newUser:User) {
       return new Promise((resolve, reject) => {
         axios
           .put('/user', newUser)

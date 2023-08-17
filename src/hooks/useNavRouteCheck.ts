@@ -16,7 +16,6 @@ export function useHeaderNavRouteCheck() {
   //监听路由变化,当路由变化自动调用hook
   watchEffect(() => {
     checkRoute(currentRoute)
-    // console.log(currentRoute)
   })
 
   //组件创建初就开始路由检查
@@ -46,7 +45,8 @@ export function useHeaderNavRouteCheck() {
         }
         break
       default:
-        activeIndex.value = '/home'
+        //导航到首页
+        activeIndex.value = '/'
         break
     }
   }

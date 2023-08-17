@@ -9,7 +9,7 @@
     text-color="#000"
     active-text-color="#ffd04b"
   >
-    <el-menu-item index="/home">首页</el-menu-item>
+    <el-menu-item index="/">首页</el-menu-item>
     <el-menu-item index="/post/list">帖子</el-menu-item>
     <el-menu-item index="/user/info">个人</el-menu-item>
     <el-menu-item v-if="currentIndex" :index="activeIndex">{{ currentIndexContent }}</el-menu-item>
