@@ -9,6 +9,7 @@ import PostItemEdit from './Post-Item-Edit.vue'
 import { useStatusStore } from '../../stores/status'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
+import { onBeforeUnmount } from 'vue'
 
 //定义要接收的Props
 //这里只需要接收id即可
@@ -29,6 +30,11 @@ try {
   const router = useRouter()
   router.push('/post/list')
 }
+
+onBeforeUnmount(() => {
+  //离开页面时,强制结束编辑状态
+  StatusStore.isEditing = false
+})
 
 </script>
 

@@ -60,7 +60,7 @@ const post: PublishPost = reactive({
   follow: 0,
   tags: [],
   isShowContent: false,
-  isCommentable: false,
+  isCommentable: true,
   isUnknown: false
 })
 //初始化

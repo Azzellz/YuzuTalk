@@ -36,7 +36,9 @@
       trigger="hover"
       content="保存当前修改的所有内容"
     >
-      <el-button type="danger" @click="saveEdited" style="margin: 20px">保存</el-button>
+      <template #reference>
+        <el-button type="danger" @click="saveEdited" style="margin: 20px">保存</el-button>
+      </template>
     </el-popover>
     <el-divider>评论区设置</el-divider>
     <Post-Comment-Edit :post="currentPost"></Post-Comment-Edit>
@@ -44,6 +46,8 @@
 </template>
 
 <script setup lang="ts">
+import PostCommentEdit from './Post-Comment-Edit.vue';
+
 import { computed } from 'vue'
 import { avatarURL } from '../../tools/index'
 import { usePostStore } from '../../stores/post'
