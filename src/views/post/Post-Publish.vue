@@ -32,7 +32,7 @@
       style="width: 75%"
     ></el-input>
     <div class="publish-box">
-      <el-button type="primary" @click="publish" style="margin: 10px 20px;">发布</el-button>
+      <el-button type="primary" @click="publish" style="margin: 10px 20px">发布</el-button>
       <el-checkbox v-model="post.isShowContent" style="margin: 10px 20px"
         >发布后展示内容</el-checkbox
       >
@@ -43,11 +43,10 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, nextTick,toRaw } from 'vue'
+import { reactive, ref, nextTick, toRaw } from 'vue'
 import type { PublishPost } from '../../stores/post'
 import axios from 'axios'
 import { ElInput, ElMessage } from 'element-plus'
-import { usePostStore } from '../../stores/post'
 import { useRouter } from 'vue-router'
 //post的逻辑
 //#region
@@ -64,10 +63,10 @@ const post: PublishPost = reactive({
   isCommentable: false,
   isUnknown: false
 })
-const postStore = usePostStore()
+//初始化
 const router = useRouter()
 //发布
-function publish() {
+async function publish() {
   //检测标题或者内容是否为空
   if (!post.title || !post.content) {
     ElMessage.error({
@@ -77,34 +76,32 @@ function publish() {
     })
     return
   }
-  //发送post请求
-  axios
-    .post('/post', {
-      post:toRaw(post), //这里要返回普通对象
+  //发送发布post请求
+  try {
+    const {
+      data: { data }
+    } = await axios.post('/post', {
+      post: toRaw(post), //这里要返回普通对象
       user_id: localStorage.getItem('user_id') //发送当前用户id
     })
-    .then(async ({ data: { data } }) => {
-      await postStore.getPosts() //更新文章列表
-      router.replace({
-        path: '/post/item',
-        query: {
-          id: data._id
-        }
-      }) //跳转到文章详情页
-      ElMessage.success({
-        showClose: true,
-        message: '发布成功',
-        offset: 80
-      })
+    router.replace({
+      path: '/post/item',
+      query: {
+        id: data._id
+      }
+    }) //跳转到文章详情页
+    ElMessage.success({
+      showClose: true,
+      message: '发布成功',
+      offset: 80
     })
-    .catch((err) => {
-      console.log(err)
-      ElMessage.error({
-        showClose: true,
-        message: '发布失败',
-        offset: 80
-      })
+  } catch (error) {
+    console.log(error)
+    ElMessage.error({
+      message: '发布失败',
+      offset: 80
     })
+  }
 }
 //#endregion
 

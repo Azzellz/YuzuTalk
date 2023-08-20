@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { POST_FROM, type GetPostOption } from './post'
+import { POST_FROM, type GetPostOption, type Post } from './post'
 import { useUserStore } from './user'
 import { usePostStore } from './post'
 
@@ -8,29 +8,27 @@ const PostStore = usePostStore()
 //记录状态
 export const useStatusStore = defineStore('status', {
   state: () => ({
-    isEditing: false
+    //是否正处于post编辑状态
+    isEditing: false,
+    //存储当前博客
+    currentPost: {} as Post
   }),
   actions: {
-    //根据来源来动态更新数据源
-    async dynamicUpdate(FROM: POST_FROM, getOption: GetPostOption) {
-      switch (FROM) {
-        case POST_FROM.LATEST_POSTS:
-          await PostStore.getLatestPosts()
-          break
-        case POST_FROM.USER_POSTS:
-          await UserStore.getUser(getOption)
-          break
-        case POST_FROM.LIST_POSTS:
-          await PostStore.getPosts(getOption)
-          break
-        default:
-          Promise.all([
-            PostStore.getLatestPosts(),
-            UserStore.getUser(getOption),
-            PostStore.getPosts(getOption)
-          ])
-          break
+    //更新当前博客
+    async updateCurrentPost(): Promise<void> {
+      const id = this.currentPost._id
+      if (id) {
+        try {
+          this.currentPost = await PostStore.getPost(id)
+        } catch (error) {
+          console.log(error)
+        }
       }
+    },
+    //根据id获取博客
+    async getPost(id: string) {
+      const post = await PostStore.getPost(id)
+      this.currentPost = post
     }
   }
 })

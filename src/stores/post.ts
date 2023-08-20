@@ -16,7 +16,7 @@ export interface Post {
   content: string //正文
   user: MainUserInfo  //主要的用户信息
   tags: Array<string> //标签
-  comments: Array<object> //评论
+  comments: Array<Comment> //评论
   support: number //帖子点赞数
   oppose: number //帖子反对数
   follow: number //收藏数
@@ -32,6 +32,7 @@ export interface PublishPost {
   title: string //标题
   content: string //正文
   tags: Array<string> //标签
+  //发布时只需要初始化,所以不需要很细的接口限制
   comments: Array<object> //评论
   support: number //帖子点赞数
   oppose: number //帖子反对数
@@ -39,6 +40,18 @@ export interface PublishPost {
   isShowContent: boolean //是否显示正文
   isCommentable: boolean //是否启动评论区
   isUnknown: boolean //是否匿名发布
+}
+
+export interface Comment{
+  _id: string //id
+  user: MainUserInfo //用户信息
+  post:Post //评论所属的post
+  content: string //评论内容
+  time_stamp: number //评论时间戳
+  format_time: string //格式化的评论时间
+  support: number //评论点赞数
+  oppose: number //评论反对数
+
 }
 
 //state约束
@@ -91,6 +104,21 @@ export const usePostStore = defineStore('post', {
             console.log('updated post-list:', this.posts)
 
             //解除渲染锁
+            resolve(data)
+          })
+          .catch((err) => {
+            console.log(err)
+            reject(err)
+          })
+      })
+    },
+    //根据id获取post
+    getPost(id:string):Promise<Post>{
+      return new Promise((resolve, reject) => {
+        axios
+          .get(`/post?id=${id}`)
+          .then(({ data: { data } }) => {
+            //返回post
             resolve(data)
           })
           .catch((err) => {
