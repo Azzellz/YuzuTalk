@@ -28,9 +28,9 @@
 </template>
 
 <script setup lang="ts">
-import PostCard from './Post-Card.vue'
+import PostCard from '../card/Post-Card.vue'
 import {  ref, watch } from 'vue'
-import { usePostStore } from '../../stores/post'
+import { usePostStore } from '@/stores/post'
 //分页的逻辑
 //#region
 const pageSize = ref(10)

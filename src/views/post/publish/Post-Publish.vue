@@ -44,7 +44,7 @@
 
 <script setup lang="ts">
 import { reactive, ref, nextTick, toRaw } from 'vue'
-import type { PublishPost } from '../../stores/post'
+import type { PublishPost } from '@/stores/post'
 import axios from 'axios'
 import { ElInput, ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router'

@@ -6,7 +6,7 @@
 <script setup lang="ts">
 import PostItemNormal from './Post-Item-Normal.vue'
 import PostItemEdit from './Post-Item-Edit.vue'
-import { useStatusStore } from '../../stores/status'
+import { useStatusStore } from '@/stores/status'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { onBeforeUnmount } from 'vue'

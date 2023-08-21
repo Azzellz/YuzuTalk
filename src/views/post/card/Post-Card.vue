@@ -46,7 +46,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { getBetterFormatTime,avatarURL } from '../../tools/index';
+import { getBetterFormatTime,avatarURL } from '@/utils/index';
 import type { Post } from '@/stores/post';
 //声明接收props
 const props = defineProps<{

@@ -51,10 +51,10 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { usePostStore } from '../../stores/post'
-import PostCard from '../post/Post-Card.vue'
-import { useUserStore } from '../../stores/user'
-import { avatarURL } from '../../tools/index';
+import { usePostStore } from '@/stores/post'
+import PostCard from '../post/card/Post-Card.vue'
+import { useUserStore } from '@/stores/user'
+import { avatarURL } from '@/utils/index';
 
 //初始化数据
 //#region

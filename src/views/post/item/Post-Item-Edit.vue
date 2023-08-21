@@ -46,12 +46,12 @@
 </template>
 
 <script setup lang="ts">
-import PostCommentEdit from './Post-Comment-Edit.vue';
+import PostCommentEdit from '../comment/Post-Comment-Edit.vue';
 
 import { computed } from 'vue'
-import { avatarURL } from '../../tools/index'
-import { usePostStore } from '../../stores/post'
-import { useStatusStore } from '../../stores/status';
+import { avatarURL } from '@/utils/index'
+import { usePostStore } from '@/stores/post'
+import { useStatusStore } from '@/stores/status';
 import { ElMessage } from 'element-plus'
 
 //引用status中的currentPost

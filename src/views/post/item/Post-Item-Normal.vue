@@ -41,11 +41,11 @@
 </template>
 
 <script setup lang="ts">
-import PostComment from './Post-Comment.vue'
-import { type Post } from '../../stores/post'
-import { avatarURL } from '../../tools/index'
+import PostComment from '../comment/Post-Comment.vue'
+import { type Post } from '@/stores/post'
+import { avatarURL } from '@/utils/index'
 import { computed } from 'vue'
-import { useStatusStore } from '../../stores/status'
+import { useStatusStore } from '@/stores/status'
 const StatusStore = useStatusStore()
 //获取当前帖子
 const currentPost: Post = StatusStore.currentPost

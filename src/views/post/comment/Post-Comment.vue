@@ -73,7 +73,7 @@
 <script setup lang="ts">
 import PostCommentCard from './Post-Comment-Card.vue'
 import axios from 'axios'
-import { computed, ref } from 'vue'
+import { computed, ref, watchEffect } from 'vue'
 import { ElMessage } from 'element-plus'
 import { useStatusStore } from '@/stores/status'
 import { usePostStore } from '@/stores/post'
@@ -81,12 +81,15 @@ import { usePostStore } from '@/stores/post'
 const StatusStore = useStatusStore()
 const PostStore = usePostStore()
 //引用props中的post
-const currentPost = StatusStore.currentPost
+let currentPost = StatusStore.currentPost
 //判断是否为作者
 const isAuthor = computed(() => {
   return currentPost.user._id === localStorage.getItem('user_id')
 })
 
+watchEffect(() => {
+  console.log(StatusStore.currentPost)
+})
 //封装公共逻辑
 //#region
 //#endregion
@@ -130,9 +133,16 @@ async function publishComment() {
   //TODO: 这里可以做个评论区校验,防止用户恶意评论
   try {
     //这里不需要接收返回值,因为在评论区会重新获取评论列表
-    await axios.post('/comment', comment)
+    const {data:{data}} = await axios.post('/comment', comment)
     //更新当前post引用
-    await StatusStore.updateCurrentPost()
+    currentPost.comments.push(data)
+    //提示
+    ElMessage.success({
+      message: '评论成功',
+      offset: 80
+    })
+    //清空输入框
+    commentContent.value = ''
   } catch (error) {
     console.log(error)
     //提示失败

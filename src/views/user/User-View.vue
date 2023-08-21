@@ -1,12 +1,13 @@
 <template>
+  <!-- 路由中转站 -->
   <router-view :class="autoFit"></router-view>
 </template>
 
 <script setup lang="ts">
+import {  type GetPostOption } from '@/stores/post';
+import { useUserStore } from '@/stores/user';
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-import { type GetPostOption, usePostStore } from '@/stores/post'
-import { useUserStore } from '@/stores/user'
 //根据路由动态展示css类
 //#region
 const route = useRoute()
@@ -18,8 +19,7 @@ const autoFit = computed(() => {
 })
 //#endregion
 
-//初始化逻辑放到路由中转组件这里做
-//初始化Post数据
+//初始化User数据
 //#region
 const currentPage = route.query.currentPage ? Number(route.query.currentPage) : 1
 const pageSize = route.query.pageSize ? Number(route.query.pageSize) : 10
@@ -27,9 +27,8 @@ const option: GetPostOption = {
   currentPage,
   pageSize
 }
-const PostStore = usePostStore()
 const UserStore = useUserStore()
-await Promise.all([PostStore.getPosts(option), UserStore.getUser(option)])
+await UserStore.getUser(option)
 //#endregion
 </script>
 
