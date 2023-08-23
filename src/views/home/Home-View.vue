@@ -2,7 +2,7 @@
   <div class="container" v-if="isReady">
     <div class="recent-posts">
       <h1 style="text-align: center">最新</h1>
-      <PostCard v-for="post in postStore.latestPosts" :key="post._id" :post="post" />
+      <PostCard v-for="post in postStore.latestPosts.list" :key="post._id" :post="post" :FROM="POST_FROM.LATEST_POSTS"/>
     </div>
     <div class="recent-users">
       <div class="hot-user-post">
@@ -55,13 +55,15 @@ import { usePostStore } from '@/stores/post'
 import PostCard from '../post/card/Post-Card.vue'
 import { useUserStore } from '@/stores/user'
 import { avatarURL } from '@/utils/index';
+import { POST_FROM } from '@/models/post/enum';
 
 //初始化数据
 //#region
 const postStore = usePostStore()
 const userStore = useUserStore()
 const isReady = ref(false)
-await Promise.all([postStore.getLatestPosts(), userStore.getUser(), userStore.getRecentUsers()])
+//获取有用到的数据
+await Promise.all([postStore.getLatestPosts(10), userStore.getUser(), userStore.getRecentUsers()])
 isReady.value = true
 //#endregion
 

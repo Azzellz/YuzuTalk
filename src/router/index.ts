@@ -49,6 +49,9 @@ const router = createRouter({
           props($route) {
             return {
               id: $route.query.id,
+              FROM: $route.query.FROM,
+              currentPage: $route.query.currentPage,
+              pageSize: $route.query.pageSize
             }
           }
         }
@@ -86,14 +89,15 @@ const router = createRouter({
           component: import('@/views/user/other/User-Other-Info.vue'),
           meta: {
             isHideAside: true //展示其他用户信息时隐藏侧边栏,注意,meta以这里的为主,其他地方的会被覆盖
-          },
-          props($route) {
-            return {
-              id: $route.query.id,
-              currentPage: $route.query.currentPage,
-              pageSize: $route.query.pageSize
-            }
           }
+          // props($route) {
+          //   return {
+          //     id: $route.query.id,
+          //     FROM: $route.query.FROM,
+          //     currentPage: $route.query.currentPage,
+          //     pageSize: $route.query.pageSize
+          //   }
+          // }
         }
       ]
     }

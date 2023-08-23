@@ -68,8 +68,9 @@
 import PostCommentCardEdit from './Post-Comment-Card-Edit.vue';
 
 import { useStatusStore } from '@/stores/status'
-import { usePostStore, type Post, type Comment } from '@/stores/post'
+import { usePostStore } from '@/stores/post'
 import { ElMessage } from 'element-plus'
+import type { Comment, Post } from '@/models/post/interface';
 
 //获取PostStore状态管理
 const PostStore = usePostStore()

@@ -4,7 +4,7 @@
 </template>
 
 <script setup lang="ts">
-import {  type GetPostOption } from '@/stores/post';
+import {  type GetPostOption } from '@/models/post/interface';
 import { useUserStore } from '@/stores/user';
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'

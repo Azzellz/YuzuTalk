@@ -50,7 +50,7 @@
 </template>
 
 <script setup lang="ts">
-import type { Comment } from '@/stores/post'
+import type { Comment } from '@/models/post/interface'
 import { avatarURL } from '@/utils/index'
 import axios from 'axios'
 import { ElMessage } from 'element-plus'

@@ -1,160 +1,115 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
-import type { MainUserInfo } from './user'
+import { useRoute, type RouteLocationNormalizedLoaded } from 'vue-router'
+import { MainPosts, FavoritesPosts, LatestPosts, PublishedPosts } from '@/models/post/class'
+import type { GetPostOption, Post } from '@/models/post/interface'
+import { POST_FROM } from '@/models/post/enum'
+import { useUserStore } from './user'
 
-//分页获取post配置接口
-export interface GetPostOption {
-  currentPage?: number
-  pageSize?: number
-  keyword?: string
-}
-
-// ?有一些字段是服务端传来的,可以设置成?可选的,在之后用到的地方可以使用!断言
-export interface Post {
-  _id: string  //id,由服务端生成
-  title: string //标题
-  content: string //正文
-  user: MainUserInfo  //主要的用户信息
-  tags: Array<string> //标签
-  comments: Array<Comment> //评论
-  support: number //帖子点赞数
-  oppose: number //帖子反对数
-  follow: number //收藏数
-  isShowContent: boolean //是否显示正文
-  isCommentable: boolean //是否启动评论区
-  isUnknown: boolean //是否匿名发布
-  index: number //文章索引
-  format_time: string //格式化的发布时间
-  time_stamp: number //发布时间戳
-}
-//用于发布时的数据约束
-export interface PublishPost {
-  title: string //标题
-  content: string //正文
-  tags: Array<string> //标签
-  //发布时只需要初始化,所以不需要很细的接口限制
-  comments: Array<object> //评论
-  support: number //帖子点赞数
-  oppose: number //帖子反对数
-  follow: number //收藏数
-  isShowContent: boolean //是否显示正文
-  isCommentable: boolean //是否启动评论区
-  isUnknown: boolean //是否匿名发布
-}
-
-export interface Comment{
-  _id: string //id
-  user: MainUserInfo //用户信息
-  post:Post //评论所属的post
-  content: string //评论内容
-  time_stamp: number //评论时间戳
-  format_time: string //格式化的评论时间
-  support: number //评论点赞数
-  oppose: number //评论反对数
-
-}
+const UserStore = useUserStore()
 
 //state约束
 interface PostState {
-  posts: Array<Post>
-  latestPosts: Array<Post>
-  total: number
-  currentPage: number
-  pageSize: number
-}
-
-//POST_FROM数据来源
-export enum POST_FROM{
-  USER_POSTS,
-  LATEST_POSTS,
-  LIST_POSTS,
-  UNKNOWN
+  mainPosts: MainPosts
+  latestPosts: LatestPosts
+  publishedPost: PublishedPosts
+  favoritesPost: FavoritesPosts
 }
 
 export const usePostStore = defineStore('post', {
-  state: ():PostState => {
+  state: (): PostState => {
     return {
-      posts: [], //记录post列表
-      latestPosts: [], //记录最新的post
-      total: 0, //记录数据库post总数
-      currentPage: 0, //默认从0开始算就是第一页
-      pageSize: 10 //每页显示的记录数
+      //记录总post列表
+      mainPosts: new MainPosts(),
+      //记录最新的post
+      latestPosts: new LatestPosts(),
+      //记录当前用户发布的post
+      publishedPost: new PublishedPosts(),
+      //记录当前用户收藏的post
+      favoritesPost: new FavoritesPosts()
     }
   },
   actions: {
+    //动态更新post列表
+    /**
+     * 
+     * @param route 当前路由对象
+     * @param FROM Post来源的枚举值
+     */
+    async dynamicUpdate(route: RouteLocationNormalizedLoaded, FROM: POST_FROM) {
+      //根据路由参数分割出currentPage和pageSize和keyword
+      //组装选项
+      const option: GetPostOption = {
+        currentPage: route.query.currentPage ? Number(route.query.currentPage) : 1,
+        pageSize: route.query.pageSize ? Number(route.query.pageSize) : 10,
+        keyword: route.query.keyword ? String(route.query.keyword) : ''
+      }
+      //根据来源去动态更新列表
+      switch (FROM) {
+        case this.latestPosts.FROM:
+          await this.getLatestPosts()
+          break
+        case this.mainPosts.FROM:
+          await this.getPosts(option)
+          break
+        case this.publishedPost.FROM:
+          await this.getPublishedPosts(option)
+          break
+        case this.favoritesPost.FROM:
+          await this.getFavoritesPosts(option)
+          break
+        default:
+          //全部更新
+          await Promise.all([
+            this.getLatestPosts(),
+            this.getPosts(option),
+            this.getPublishedPosts(option),
+            this.getFavoritesPosts(option)
+          ])
+      }
+    },
     //根据条件获取post列表
-    getPosts(option?: GetPostOption) {
-      //检查是否有参数传入,没有就使用默认值
-      if (!option) option = {}
-      const currentPage = option.currentPage ? option.currentPage - 1 : 0 //currentPage=0的时候就是初始查询,不跳过
-      const pageSize = option.pageSize || 10 //默认是一页展示10个post
-      const keyword = option.keyword || '' //默认搜索关键字为空
-
-      return new Promise((resolve, reject) => {
-        axios
-          .get(`/posts?limit=${pageSize}&skip=${currentPage * pageSize}&keyword=${keyword}`)
-          .then(({ data: { data } }) => {
-            //从上下文对象中触发commit函数提交mutation,更新state
-            //修改state
-            //todo 可优化成直接替换当前State
-            this.currentPage = currentPage
-            this.pageSize = pageSize
-            this.total = data.total
-            this.posts = data.posts
-            console.log('updated post-list:', this.posts)
-
-            //解除渲染锁
-            resolve(data)
-          })
-          .catch((err) => {
-            console.log(err)
-            reject(err)
-          })
-      })
+    async getPosts(option?: GetPostOption) {
+      await this.mainPosts.getPosts(option)
     },
     //根据id获取post
-    getPost(id:string):Promise<Post>{
-      return new Promise((resolve, reject) => {
-        axios
-          .get(`/post?id=${id}`)
-          .then(({ data: { data } }) => {
-            //返回post
-            resolve(data)
-          })
-          .catch((err) => {
-            console.log(err)
-            reject(err)
-          })
-      })
+    async getPost(id: string): Promise<Post> {
+      const {
+        data: { data }
+      } = await axios.get(`/post?id=${id}`)
+      return data as Post
     },
     //获取最新的十篇文章
-    getLatestPosts() {
-      //!获取最新的十篇文章,后续可拓展获取指定数量的文章
-      return new Promise((resolve, reject) => {
-        axios
-          .get(`/posts/lastest`)
-          .then(({ data: { data } }) => {
-            //更新LatestPosts
-            this.latestPosts = data
-            console.log('updated lastest-post-list:', data)
-            //解除渲染锁
-            resolve(data)
-          })
-          .catch((err) => {
-            console.log(err)
-            reject(err)
-          })
-      })
+    async getLatestPosts(limit?: number) {
+      //没传limit使用默认值
+      if (!limit) limit = this.latestPosts.postLimit
+      await this.latestPosts.getPosts(limit)
+    },
+    //获取当前用户发布的post
+    async getPublishedPosts(option?: GetPostOption) {
+      await this.publishedPost.getPosts(UserStore.user._id, option)
+    },
+    //获取当前用户收藏的post
+    async getFavoritesPosts(option?: GetPostOption) {
+      await this.favoritesPost.getPosts(UserStore.user._id, option)
     },
     //直接将整个post对象传入,替换数据库内具有相同id的post
-    //TODO: 这里的newPost需要加个接口约束
-    updatePost(newPost: Post) {
-      console.log('going to update:', newPost)
-      return axios.put(`/post`, newPost)
+    async updatePost(new_post: Post) {
+      await axios.put(`/post`, new_post)
     },
     //删除post
-    deletePost(post_id: string) {
-      return axios.delete(`/post?post_id=${post_id}`)
+    async deletePost(post_id: string) {
+      await axios.delete(`/post?post_id=${post_id}`)
     },
+    //获取getOption
+    getOption(): GetPostOption {
+      const route = useRoute()
+      const option: GetPostOption = {
+        currentPage: route.query.currentPage ? Number(route.query.currentPage) : 1,
+        pageSize: route.query.pageSize ? Number(route.query.pageSize) : 10,
+        keyword: route.query.keyword ? String(route.query.keyword) : ''
+      }
+      return option
+    }
   }
 })

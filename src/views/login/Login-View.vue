@@ -41,7 +41,7 @@ function login() {
       localStorage.setItem('user_account', data.user_account)
       localStorage.setItem('avatar', data.avatar)
       //跳转到首页
-      router.replace('/home')
+      router.replace('/')
       //提示登录成功
       ElMessage.success({
         message: '登录成功',

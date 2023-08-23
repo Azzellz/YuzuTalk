@@ -42,7 +42,7 @@
 
 <script setup lang="ts">
 import PostComment from '../comment/Post-Comment.vue'
-import { type Post } from '@/stores/post'
+import { type Post } from '@/models/post/interface'
 import { avatarURL } from '@/utils/index'
 import { computed } from 'vue'
 import { useStatusStore } from '@/stores/status'

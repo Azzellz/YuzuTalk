@@ -7,27 +7,25 @@ import HeaderNav from './components/Header/Header-Nav.vue'
 const currentRoute = useRoute()
 //是否展示Header的计算属性
 const isHideHeader = computed(() => {
-  return !currentRoute.meta.hideHeader
+    return !currentRoute.meta.hideHeader
 })
 //是否展示Aside的计算属性
 const isHideAside = computed(() => {
-  return !currentRoute.meta.hideAside
+    return !currentRoute.meta.hideAside
 })
 </script>
 
 <template>
-  <!-- 顶部导航栏 -->
-  <HeaderNav v-if="isHideHeader"></HeaderNav>
-  <router-view v-if="isHideAside" name="aside"></router-view>
-  <!-- 内容展示 -->
-  <!-- 需要套层异步Suspense -->
-  <Suspense>
-    <router-view style="flex: 1"></router-view>
-    <!-- 这里可以搞个加载效果的组件 -->
-    <template #fallback>
-      Loading...
-    </template>
-  </Suspense>
+    <!-- 顶部导航栏 -->
+    <HeaderNav v-if="isHideHeader"></HeaderNav>
+    <router-view v-if="isHideAside" name="aside"></router-view>
+    <!-- 内容展示 -->
+    <!-- 需要套层异步Suspense -->
+    <Suspense>
+        <router-view style="flex: 1"></router-view>
+        <!-- 这里可以搞个加载效果的组件 -->
+        <template #fallback> Loading... </template>
+    </Suspense>
 </template>
 
 <style scoped></style>

@@ -86,10 +86,6 @@ let currentPost = StatusStore.currentPost
 const isAuthor = computed(() => {
   return currentPost.user._id === localStorage.getItem('user_id')
 })
-
-watchEffect(() => {
-  console.log(StatusStore.currentPost)
-})
 //封装公共逻辑
 //#region
 //#endregion

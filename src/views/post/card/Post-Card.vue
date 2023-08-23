@@ -4,6 +4,7 @@
       path: '/post/item',
       query: {
         id: post._id,
+        FROM: FROM,
         currentPage: currentPage,
         pageSize: pageSize
       }
@@ -47,10 +48,13 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { getBetterFormatTime,avatarURL } from '@/utils/index';
-import type { Post } from '@/stores/post';
+import type { POST_FROM } from '@/models/post/enum';
+import type { Post } from '@/models/post/interface';
+
 //声明接收props
 const props = defineProps<{
   post: Post,
+  FROM: POST_FROM,
   currentPage?: number,
   pageSize?: number
 }>()

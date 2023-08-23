@@ -5,8 +5,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-import { type GetPostOption, usePostStore } from '@/stores/post'
-import { useUserStore } from '@/stores/user'
+import {  usePostStore } from '@/stores/post'
 //根据路由动态展示css类
 //#region
 const route = useRoute()
@@ -21,15 +20,11 @@ const autoFit = computed(() => {
 //初始化逻辑放到路由中转组件这里做
 //初始化Post数据
 //#region
-const currentPage = route.query.currentPage ? Number(route.query.currentPage) : 1
-const pageSize = route.query.pageSize ? Number(route.query.pageSize) : 10
-const option: GetPostOption = {
-  currentPage,
-  pageSize
-}
 const PostStore = usePostStore()
-const UserStore = useUserStore()
-await Promise.all([PostStore.getPosts(option), UserStore.getUser(option)])
+//获取option
+const option = PostStore.getOption()
+//这边既是为了获取初始化数据,也是为了防止刷新后数据丢失
+await PostStore.getPosts(option)
 //#endregion
 </script>
 
