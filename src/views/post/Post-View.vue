@@ -24,7 +24,12 @@ const PostStore = usePostStore()
 //获取option
 const option = PostStore.getOption()
 //这边既是为了获取初始化数据,也是为了防止刷新后数据丢失
-await PostStore.getPosts(option)
+try {
+  await PostStore.getPosts(option)
+} catch (error) {
+  console.log(error)
+}
+
 //#endregion
 </script>
 

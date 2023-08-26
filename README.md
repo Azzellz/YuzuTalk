@@ -1,51 +1,44 @@
-# YuzuTalk
+# Yuzu
 
-This template should help get you started developing with Vue 3 in Vite.
+一个开源的论坛项目的前端部分,欢迎一起加入项目的开发
 
-## Recommended IDE Setup
+## 技术栈
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+[Vue3](https://cn.vuejs.org/)(主流的渐进式前端框架) + [Vite](https://cn.vitejs.dev/)(下一代前端构建工具) + [Pinia](https://pinia.vuejs.org/zh/)(符合直觉的Vue.js 状态管理库) + [VueRouter](https://router.vuejs.org/zh/)(Vue.js 的官方路由) + [TypeScript](https://typescript.bootcss.com/)(最喜欢的js超集)
 
-## Type Support for `.vue` Imports in TS
+## 联系我
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
+QQ:2528447065
 
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
+## Vite配置看这里
 
-1. Disable the built-in TypeScript Extension
-    1) Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-    2) Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
+这里! [Vite Configuration Reference](https://vitejs.dev/config/).
 
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
+## 项目安装
 
 ```sh
 npm install
 ```
 
-### Compile and Hot-Reload for Development
+### 启动发时的热更新
 
 ```sh
 npm run dev
 ```
 
-### Type-Check, Compile and Minify for Production
+### 以生产环境标准打包
 
 ```sh
 npm run build
 ```
 
-### Run Unit Tests with [Vitest](https://vitest.dev/)
+### 使用[Vitest](https://vitest.dev/)进行单元测试
 
 ```sh
 npm run test:unit
 ```
 
-### Lint with [ESLint](https://eslint.org/)
+### 使用[ESLint](https://eslint.org/)检查代码
 
 ```sh
 npm run lint

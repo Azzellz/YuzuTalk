@@ -1,4 +1,4 @@
-import type { MainUserInfo } from '@/models/user/interface'
+import type { I_MainUserInfo } from '@/models/user/interface'
 import type { POST_FROM } from '../enum'
 
 //Post
@@ -6,7 +6,7 @@ export interface Post {
   _id: string //id,由服务端生成
   title: string //标题
   content: string //正文
-  user: MainUserInfo //主要的用户信息
+  user: I_MainUserInfo //主要的用户信息
   tags: Array<string> //标签
   comments: Array<Comment> //评论
   support: number //帖子点赞数
@@ -35,14 +35,14 @@ export interface PublishPost {
 }
 //Comment
 export interface Comment {
-  _id: string //id
-  user: MainUserInfo //用户信息
-  post: Post //评论所属的post
-  content: string //评论内容
-  time_stamp: number //评论时间戳
-  format_time: string //格式化的评论时间
-  support: number //评论点赞数
-  oppose: number //评论反对数
+    _id: string //id
+    user: I_MainUserInfo //用户信息
+    post: Post //评论所属的post
+    content: string //评论内容
+    time_stamp: number //评论时间戳
+    format_time: string //格式化的评论时间
+    support: number //评论点赞数
+    oppose: number //评论反对数
 }
 //列表
 export interface PostList {
@@ -52,14 +52,14 @@ export interface PostList {
 }
 //分页
 export interface Pagination {
-  currentPage?: number //当前页
-  pageSize?: number //每页显示的记录数
+  currentPage: number //当前页
+  pageSize: number //每页显示的记录数
 }
 //可分页的列表
 export interface PaginatedPostList extends PostList, Pagination {}
 //搜索
 export interface Search {
-  keyword?: string //搜索关键字
+  keyword: string //搜索关键字
 }
 //获取post的参数:分页+搜索
 export interface GetPostOption extends Pagination, Search {}

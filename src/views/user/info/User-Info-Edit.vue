@@ -45,8 +45,8 @@ import { ElMessage } from 'element-plus'
 const UserStore = useUserStore()
 const StatusStore = useStatusStore()
 //获取原始用户信息
-const originUser = toRaw(UserStore.user)
-const user = UserStore.user
+const originUser = toRaw(UserStore.currentUser.origin)
+const user = UserStore.currentUser.origin
 //同步本地存储
 function updateLocalStroage() {
     localStorage.setItem('user_name', user.user_name)
@@ -79,7 +79,7 @@ async function save() {
         //更新用户信息
         await UserStore.updateUser(user)
         //刷新用户信息
-        await UserStore.getUser()
+        await UserStore.getCurrentUser()
         //同步本地存储
         updateLocalStroage()
         //退出编辑状态

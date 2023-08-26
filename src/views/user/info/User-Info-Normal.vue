@@ -40,7 +40,8 @@ import { useRouter } from 'vue-router'
 import axios from 'axios'
 
 //获取User
-const user = useUserStore().user
+const UserStore = useUserStore()
+const user = UserStore.currentUser.origin
 //获取状态管理
 const StatusStore = useStatusStore()
 //用户相关的逻辑

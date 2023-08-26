@@ -43,10 +43,9 @@ onBeforeUnmount(() => {
   //离开页面时,强制结束编辑状态
   StatusStore.isEditing = false
   //调用动态更新数据源方法
-  //注意!!!!
-  //这里的FROM是通过路由传递过来的,所以会变成字符串,这里要转换成数字
-  //离开时动态更新数据源
-  PostStore.dynamicUpdate(useRoute(),Number(props.FROM))
+  //注意!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  //离开时动态更新数据源,让用户离开界面后能看到PostCard的改变
+  PostStore.dynamicUpdate(useRoute(),props.FROM)
 })
 
 </script>
