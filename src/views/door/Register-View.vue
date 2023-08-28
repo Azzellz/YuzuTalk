@@ -53,16 +53,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref } from 'vue'
+import router from '@/router'
 import { ElMessage } from 'element-plus'
 import type { UploadInstance } from 'element-plus'
 //获取路由器
-const router = useRouter()
-onMounted(() => {
-    //如果有token则直接跳转到home,不允许再进入注册页面
-    localStorage.getItem('token') && router.replace('/home')
-})
+
 //初始化注册信息
 const user_name = ref<string>('')
 const account = ref<string>('')
@@ -114,7 +110,7 @@ function handleAvatarSuccess(res: any) {
     localStorage.setItem('user_name', data.user_name)
     localStorage.setItem('user_account', data.account)
     //跳转至home
-    router.replace('/home') //这里提示要放路由跳转后面,不然有延迟很难看
+    router.replace('/') //这里提示要放路由跳转后面,不然有延迟很难看
     ElMessage.success({
         message: '注册成功',
         offset: 80

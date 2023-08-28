@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import HeaderNav from './components/Header/Header-Nav.vue'
+import LoadingView from './components/Loading/Loading-View.vue'
 
 //获取当前路由
 const currentRoute = useRoute()
@@ -24,7 +25,7 @@ const isHideAside = computed(() => {
     <Suspense>
         <router-view style="flex: 1"></router-view>
         <!-- 这里可以搞个加载效果的组件 -->
-        <template #fallback> Loading... </template>
+        <template #fallback> <LoadingView></LoadingView> </template>
     </Suspense>
 </template>
 

@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-import { useLogin } from '../../hooks/useLogin'
+import { useLogin } from '@/hooks/useLogin'
 //使用LoginHooks
 const { account, password, login } = useLogin()
 </script>

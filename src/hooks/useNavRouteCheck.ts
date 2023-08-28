@@ -1,3 +1,4 @@
+import router from '@/router'
 import { computed, onMounted, ref, watchEffect } from 'vue'
 import { useRoute, type RouteLocationNormalizedLoaded } from 'vue-router'
 //顶部Header检查
@@ -12,7 +13,6 @@ export function useHeaderNavRouteCheck() {
     if (currentRoute.query.title) return currentRoute.query.title
     else return '当前'
   })
-
   //监听路由变化,当路由变化自动调用hook
   watchEffect(() => {
     checkRoute(currentRoute)
@@ -32,7 +32,7 @@ export function useHeaderNavRouteCheck() {
     currentIndex.value = false
     const front = to.path.split('/')[1]
     const end = to.path.split('/')[2]
-
+    //匹配前缀和后缀
     switch (front) {
       case 'post':
         activeIndex.value = '/post/list'
@@ -45,8 +45,9 @@ export function useHeaderNavRouteCheck() {
         }
         break
       default:
-        //导航到首页
+        //TODO导航到首页???或者可以导航到未知页?
         activeIndex.value = '/'
+        router.replace('/')
         break
     }
   }

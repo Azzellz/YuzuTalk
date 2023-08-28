@@ -1,5 +1,6 @@
-import { createRouter, createWebHistory } from 'vue-router'
-
+import { useCheck } from '@/hooks/useCheck'
+import { createRouter, createWebHistory, type RouteLocationNormalized } from 'vue-router'
+//定义router
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
@@ -8,20 +9,14 @@ const router = createRouter({
             component: () => import('@/views/door/Door-View.vue'),
             meta: {
                 hideHeader: true
-            }
-        },
-        {
-            path: '/login',
-            component: () => import('@/views/login/Login-View.vue'),
-            meta: {
-                hideHeader: true
-            }
-        },
-        {
-            path: '/register',
-            component: () => import('@/views/register/Register-View.vue'),
-            meta: {
-                hideHeader: true
+            },
+            beforeEnter: () => {
+                //在这里判断是否已经有token,如果有则直接导航到首页
+                if (localStorage.getItem('token')) {
+                    return '/'
+                } else {
+                    return true
+                }
             }
         },
         {
@@ -118,5 +113,12 @@ const router = createRouter({
         }
     ]
 })
-
+//check-hooks
+const { loginCheck, storageCheck } = useCheck()
+router.beforeEach(async (to: RouteLocationNormalized) => {
+    //在这里进行登录检查
+    await loginCheck(to)
+    //本地存储检查
+    storageCheck(to)
+})
 export default router

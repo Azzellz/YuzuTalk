@@ -59,7 +59,7 @@ const registerLabelStyle = computed(() => {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background: url('@/../public/beauty.jpg') fixed no-repeat;
+    background: url('/beauty.jpg') fixed no-repeat;
     background-size: cover;
     &:before {
         content: '';

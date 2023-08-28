@@ -50,7 +50,7 @@ const StatusStore = useStatusStore()
 const router = useRouter()
 function quitLogin() {
     localStorage.clear() //清空本地存储
-    router.replace('/login') //跳转到登录界面
+    router.replace('/door') //跳转到登录界面
     ElMessage.success({
         message: '退出登录成功!',
         offset: 80
@@ -67,7 +67,7 @@ async function deregistration() {
             }
         })
         localStorage.clear() //清空本地存储
-        router.replace('/login') //导航至登录页面
+        router.replace('/door') //导航至登录页面
         console.log(data)
         ElMessage.success({
             message: '注销成功!',

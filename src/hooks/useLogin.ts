@@ -1,18 +1,12 @@
 import axios from 'axios'
-import { onMounted, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import {  ref } from 'vue'
+import router from '@/router'
 import { ElMessage } from 'element-plus'
 
 export function useLogin() {
-    //登录检查
-    onMounted(() => {
-        //如果有token则直接跳转到home,不允许再进入登录页面
-        localStorage.getItem('token') && router.replace('/')
-    })
     //初始化数据
     const account = ref('')
     const password = ref('')
-    const router = useRouter()
     //登录的逻辑
     function login() {
         axios
