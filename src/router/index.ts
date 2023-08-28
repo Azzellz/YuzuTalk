@@ -4,6 +4,13 @@ const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
         {
+            path: '/door',
+            component: () => import('@/views/door/Door-View.vue'),
+            meta: {
+                hideHeader: true
+            }
+        },
+        {
             path: '/login',
             component: () => import('@/views/login/Login-View.vue'),
             meta: {
