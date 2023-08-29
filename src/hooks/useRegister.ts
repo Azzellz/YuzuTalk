@@ -1,22 +1,18 @@
-import { ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref } from 'vue'
+import router from '@/router'
 import { ElMessage } from 'element-plus'
 import type { UploadInstance } from 'element-plus'
 
 //注册的逻辑
 export function useRegister() {
-    //获取路由器
-    const router = useRouter()
-    onMounted(() => {
-        //如果有token则直接跳转到home,不允许再进入注册页面
-        localStorage.getItem('token') && router.replace('/home')
-    })
     //初始化注册信息
     const user_name = ref<string>('')
     const account = ref<string>('')
     const password = ref<string>('')
     const imgUrl = ref<string>('')
 
+    //头像相关的逻辑
+    //#region
     //展示上传的头像
     function showAvatar(file: any) {
         imgUrl.value = URL.createObjectURL(file.raw)
@@ -45,6 +41,10 @@ export function useRegister() {
         }
         return isJPG && isLt2M
     }
+    //#endregion
+
+    //注册相关的逻辑
+    //#region
     //处理注册成功
     function handleAvatarSuccess(res: any) {
         const { data } = res
@@ -80,16 +80,18 @@ export function useRegister() {
     }
     //手动提交注册
     //获取upload组件的同名ref
+    //!注意,这里必须暴露在setup中才能获取到
     const uploadRef = ref<UploadInstance>()
-    console.log(uploadRef)
     const register = () => {
         if (check()) uploadRef.value!.submit()
     }
+    //#endregion
 
     return {
         user_name,
         account,
         password,
+        uploadRef,
         imgUrl,
         showAvatar,
         handleAvatarError,

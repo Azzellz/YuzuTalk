@@ -7,19 +7,22 @@ import LoadingView from './components/Loading/Loading-View.vue'
 //获取当前路由
 const currentRoute = useRoute()
 //是否展示Header的计算属性
-const isHideHeader = computed(() => {
+const isShowHeader = computed(() => {
+    //这里要判断是否为初始路径 /
+    if (currentRoute.path==='/') return false //返回false防止加载HeaderNav
     return !currentRoute.meta.hideHeader
 })
 //是否展示Aside的计算属性
-const isHideAside = computed(() => {
+const isShowAside = computed(() => {
     return !currentRoute.meta.hideAside
 })
+
 </script>
 
 <template>
     <!-- 顶部导航栏 -->
-    <HeaderNav v-if="isHideHeader"></HeaderNav>
-    <router-view v-if="isHideAside" name="aside"></router-view>
+    <HeaderNav v-if="isShowHeader"></HeaderNav>
+    <router-view v-if="isShowAside" name="aside"></router-view>
     <!-- 内容展示 -->
     <!-- 需要套层异步Suspense -->
     <Suspense>

@@ -46,8 +46,8 @@ export function useHeaderNavRouteCheck() {
         break
       default:
         //TODO导航到首页???或者可以导航到未知页?
-        activeIndex.value = '/'
-        router.replace('/')
+        activeIndex.value = '/home'
+        router.replace('/home')
         break
     }
   }

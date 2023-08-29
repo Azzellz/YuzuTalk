@@ -9,7 +9,7 @@ export function useCheck() {
 }
 
 //TODO 允许未登录访问的路径,是一个路径字符串数组
-const AllowRoutePathsWithoutCheck: Array<string> = ['/door']
+const AllowRoutePathsWithoutCheck: Array<string> = ['/door', '/']
 function isAllow(path: string): boolean {
     return AllowRoutePathsWithoutCheck.includes(path)
 }
@@ -57,7 +57,6 @@ export function useLoginCheck() {
 //本地存储相关
 export function useStorageCheck() {
     function storageCheck(to: RouteLocationNormalized) {
-        console.log(to.path)
         //先判断是否为允许的路径
         if (isAllow(to.path)) return
         //做本地存储检查,如果有缺漏,则跳转至登录页面
@@ -69,13 +68,11 @@ export function useStorageCheck() {
             !localStorage.getItem('avatar')
         ) {
             localStorage.clear()
-            if (to.path !== '/door') {
-                router.replace('/door')
-                ElMessage.error({
-                    message: '本地信息有误,请重新登录',
-                    offset: 80
-                })
-            }
+            router.replace('/door')
+            ElMessage.error({
+                message: '本地信息有误,请重新登录',
+                offset: 80
+            })
         }
     }
     return { storageCheck }

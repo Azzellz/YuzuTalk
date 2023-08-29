@@ -13,7 +13,7 @@
             ><el-avatar :size="40" src="/bear-walking.gif"></el-avatar
         ></el-menu-item>
 
-        <el-menu-item index="/">首页</el-menu-item>
+        <el-menu-item index="/home">首页</el-menu-item>
         <el-menu-item index="/post/list">帖子</el-menu-item>
         <el-menu-item index="/user/info">个人</el-menu-item>
         

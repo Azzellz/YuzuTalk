@@ -5,6 +5,10 @@ const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
         {
+            path: '/',
+            redirect: '/door'
+        },
+        {
             path: '/door',
             component: () => import('@/views/door/Door-View.vue'),
             meta: {
@@ -13,17 +17,25 @@ const router = createRouter({
             beforeEnter: () => {
                 //在这里判断是否已经有token,如果有则直接导航到首页
                 if (localStorage.getItem('token')) {
-                    return '/'
+                    return '/home'
                 } else {
                     return true
                 }
             }
         },
         {
-            path: '/',
+            path: '/home',
             component: () => import('@/views/home/Home-View.vue'),
             meta: {
                 hideAside: true
+            },
+            beforeEnter: () => {
+                //在这里判断是否已经有token,如果有则直接导航到首页
+                if (!localStorage.getItem('token')) {
+                    return '/door'
+                } else {
+                    return true
+                }
             }
         },
         //post相关的路由
