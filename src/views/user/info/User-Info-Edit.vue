@@ -1,39 +1,61 @@
 <template>
-    <div>
-        <div class="title">个人中心</div>
-        <el-divider content-position="right">自己</el-divider>
-        <el-card class="user-info">
-            <div class="user-item">
-                <el-avatar :size="100" :src="avatarURL(user.avatar)"></el-avatar>
-            </div>
-            <div class="user-item">
-                <el-input
-                    v-model="user.user_name"
-                    style="margin: 10px"
-                    placeholder="用户名"
-                    maxlength="8"
-                    show-word-limit
-                >
-                    <template #prepend>用户名:</template>
-                </el-input>
-                <el-input
-                    v-model="user.account"
-                    style="margin: 10px"
-                    placeholder="密码"
-                    minlength="6"
-                >
-                    <template #prepend>密码:</template>
-                </el-input>
-            </div>
-            <div class="btn-box">
+    <div class="container">
+        <el-card class="left">
+            <div class="user-info">
+                <div class="user-avatar">
+                    <el-avatar :size="100" :src="avatarURL(user.avatar)"></el-avatar>
+                </div>
+                <div class="user-item">
+                    <el-input
+                        v-model="user.user_name"
+                        style="margin: 10px 0"
+                        placeholder="用户名"
+                        maxlength="8"
+                        show-word-limit
+                    >
+                        <template #prepend>用户名:</template>
+                    </el-input>
+                    <el-input
+                        v-model="user.account"
+                        style="margin: 10px 0"
+                        placeholder="密码"
+                        minlength="6"
+                    >
+                        <template #prepend>密码:</template>
+                    </el-input>
+                </div>
                 <el-button type="danger" @click="save">保存</el-button>
             </div>
+            <el-divider content-position="left">关注</el-divider>
+            <div class="user-follows">
+                <el-space wrap>
+                    <UserCard
+                        v-for="user in UserStore.currentUser.origin.follows"
+                        :key="user._id"
+                        :user="user"
+                    ></UserCard>
+                </el-space>
+            </div>
+        </el-card>
+        <el-card class="right">
+            <el-tabs v-model="activeName">
+                <el-tab-pane label="发布的帖子" name="published">
+                    <UserPublished></UserPublished>
+                </el-tab-pane>
+                <el-tab-pane label="收藏的帖子" name="favorites">
+                    <UserFavorites></UserFavorites>
+                </el-tab-pane>
+            </el-tabs>
         </el-card>
     </div>
 </template>
 
 <script setup lang="ts">
-import {   toRaw } from 'vue'
+import UserCard from '../card/User-Card.vue'
+import UserFavorites from '../posts/User-Favorites.vue'
+import UserPublished from '../posts/User-Published.vue'
+
+import { ref, toRaw } from 'vue'
 import { useUserStore } from '@/stores/user'
 import { avatarURL } from '@/utils/index'
 import { useStatusStore } from '../../../stores/status'
@@ -44,6 +66,8 @@ import { ElMessage } from 'element-plus'
 //获取状态管理
 const UserStore = useUserStore()
 const StatusStore = useStatusStore()
+//初始化指向tab
+const activeName = ref<string>('published')
 //获取原始用户信息
 const originUser = toRaw(UserStore.currentUser.origin)
 const user = UserStore.currentUser.origin
@@ -59,7 +83,7 @@ function checkInput() {
             offset: 80
         })
         return false
-    } else if (user.user_name.trim() === originUser.user_name){
+    } else if (user.user_name.trim() === originUser.user_name) {
         //用户信息未被修改
         ElMessage.success({
             message: '保存成功!',
@@ -67,7 +91,7 @@ function checkInput() {
         })
         StatusStore.isEditing = false
         return false
-    }else {
+    } else {
         return true
     }
 }
@@ -101,27 +125,40 @@ async function save() {
 </script>
 
 <style scoped>
-.user-info {
+.container {
     display: flex;
-    flex-direction: column;
-    width: 80%;
-    min-height: 500px;
-    margin: 0 auto;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: center;
-}
-.user-item {
-    margin: 30px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: 30px;
-    font-weight: bold;
-}
-.btn-box {
-    display: flex;
-    justify-content: center;
+    .left {
+        margin: 10px;
+        flex: 0.3;
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        .user-info {
+            display: flex;
+            flex-direction: column;
+            .user-avatar {
+            }
+            .user-item {
+                margin: 10px 0;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                font-size: 30px;
+                font-weight: bold;
+            }
+            .btn-box {
+                display: flex;
+            }
+        }
+        .user-follows {
+            display: flex;
+        }
+    }
+    .right {
+        margin: 10px;
+        flex: 0.7;
+    }
 }
 </style>

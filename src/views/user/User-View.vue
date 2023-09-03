@@ -22,10 +22,7 @@ const autoFit = computed(() => {
 //#region
 const UserStore = useUserStore()
 try {
-    //如果origin没有指向user的引用,则获取当前用户
-    if (!UserStore.currentUser.origin._id) {
-        await UserStore.getCurrentUser()
-    }
+    await UserStore.getCurrentUser()
 } catch (error) {
     console.log(error)
 }

@@ -70,7 +70,7 @@ const postInfo = computed(() => {
 })
 //postContent: 过滤后的post内容
 const postContent = computed(() => {
-  return props.post.content+''
+  return props.post.content.substring(0,100)+'...'
 })
 //betterFormatTime: 更好的格式化时间
 const betterFormatTime = getBetterFormatTime(props.post.format_time)

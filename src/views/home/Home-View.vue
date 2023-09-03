@@ -14,23 +14,14 @@
                 <h1 style="text-align: center; margin: 20px">您</h1>
                 <!-- 本人 -->
                 <div class="user-box">
-                    <router-link
-                        :to="{
-                            path: '/user/other',
-                            query: {
-                                id: UserStore.currentUser.origin._id,
-                                title: UserStore.currentUser.origin.user_name
-                            }
+                    <UserAvatarRoute
+                        :user="UserStore.currentUser.origin"
+                        :options="{
+                            fit: 'fill',
+                            style:'margin: 20px',
+                            size:120
                         }"
-                    >
-                        <el-avatar
-                            :size="120"
-                            :src="avatarURL(UserStore.currentUser.origin.avatar)"
-                            fit="fill"
-                            style="margin: 20px"
-                        ></el-avatar>
-                    </router-link>
-
+                    ></UserAvatarRoute>
                     <div class="user-meta">
                         <h1 style="color: black">{{ UserStore.currentUser.origin.user_name }}</h1>
                         <p>发表了{{ UserStore.currentUser.publishedPosts.total }}篇帖子</p>
@@ -41,23 +32,12 @@
             <div class="recent-visitor">
                 <h1 style="text-align: center; margin: 20px">最近访客</h1>
                 <div style="padding: 20px">
-                    <!-- 这里应该套上一层router-view,点击用户头像即可跳转到目标用户界面 -->
-                    <router-link
+                    <UserAvatarRoute
                         v-for="user in UserStore.recentUsers.origin"
                         :key="user._id"
-                        :to="{
-                            path: '/user/other',
-                            query: {
-                                id: user._id,
-                                title: user.user_name
-                            }
-                        }"
-                        ><el-avatar
-                            :size="50"
-                            :src="avatarURL(user.avatar)"
-                            style="margin: 10px"
-                        ></el-avatar>
-                    </router-link>
+                        :user="user"
+                        :avatarSize="60"
+                    ></UserAvatarRoute>
                 </div>
             </div>
         </div>
@@ -65,10 +45,10 @@
 </template>
 
 <script setup lang="ts">
+import UserAvatarRoute from '@/components/User/User-Avatar-Route.vue'
 import { usePostStore } from '@/stores/post'
 import PostCard from '../post/card/Post-Card.vue'
 import { useUserStore } from '@/stores/user'
-import { avatarURL } from '@/utils/index'
 import { POST_FROM } from '@/models/post/enum'
 
 //初始化数据

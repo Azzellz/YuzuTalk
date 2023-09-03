@@ -9,17 +9,17 @@
         text-color="#000"
         active-text-color="#ffd04b"
     >
-        <el-menu-item
-            ><el-avatar :size="40" src="/bear-walking.gif"></el-avatar
-        ></el-menu-item>
+        <el-menu-item><el-avatar :size="40" src="/bear-walking.gif"></el-avatar></el-menu-item>
 
         <el-menu-item index="/home">首页</el-menu-item>
         <el-menu-item index="/post/list">帖子</el-menu-item>
-        <el-menu-item index="/user/info">个人</el-menu-item>
-        
-        <el-menu-item
+        <el-menu-item index="/user/info">
+            <el-avatar :size="40" :src="avatarURL(userAvatar)"></el-avatar>
+        </el-menu-item>
+
+        <!-- <el-menu-item
             ><el-avatar :size="40" src="/silly-dog.gif"></el-avatar
-        ></el-menu-item>
+        ></el-menu-item> -->
 
         <el-menu-item v-if="currentIndex" :index="activeIndex">{{
             currentIndexContent
@@ -29,7 +29,12 @@
 
 <script setup lang="ts">
 import { useHeaderNavRouteCheck } from '@/hooks/useNavRouteCheck'
+import { avatarURL } from '../../utils/index'
+import { useUserStore } from '../../stores/user'
+//顶部Nav路由检查
 const { currentIndex, currentIndexContent, activeIndex } = useHeaderNavRouteCheck()
+//获取用户头像
+const userAvatar = localStorage.getItem('avatar') || useUserStore().currentUser.origin.avatar
 </script>
 
 <style scoped>

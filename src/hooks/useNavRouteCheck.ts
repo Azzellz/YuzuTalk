@@ -146,9 +146,6 @@ export function useUserAsideNavRouteCheck() {
             case '/user/published':
                 activeIndex.value = '/user/published'
                 break
-            case '/user/follows':
-                activeIndex.value = '/user/follows'
-                break
             case '/user/favorites':
                 activeIndex.value = '/user/favorites'
                 break

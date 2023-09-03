@@ -1,8 +1,8 @@
 import { useCheck } from '@/hooks/useCheck'
-import { createRouter, createWebHistory, type RouteLocationNormalized } from 'vue-router'
+import { createRouter, createWebHashHistory, type RouteLocationNormalized } from 'vue-router'
 //定义router
 const router = createRouter({
-    history: createWebHistory(import.meta.env.BASE_URL),
+    history: createWebHashHistory(),
     routes: [
         {
             path: '/',

@@ -1,49 +1,78 @@
 <template>
-    <div>
-        <div class="title">个人中心</div>
-        <el-divider content-position="right">自己</el-divider>
-        <el-card class="user-info">
-            <div class="user-item">
-                <el-avatar :size="100" :src="avatarURL(user.avatar)"></el-avatar>
+    <div class="container">
+        <el-card class="left">
+            <div class="user-info">
+                <div class="user-avatar">
+                    <el-avatar :size="100" :src="avatarURL(user.avatar)"></el-avatar>
+                </div>
+                <div class="user-item">
+                    <div><span>用户名:</span>{{ user.user_name }}</div>
+                    <div><span>账号:</span>{{ user.account }}</div>
+                    <div><span>已发布:</span>{{ user.published.length }}篇</div>
+                    <div><span>已收藏:</span>{{ user.favorites.length }}篇</div>
+                </div>
+                <div class="btn-box">
+                    <el-popconfirm title="确定退出登录吗" @confirm="quitLogin">
+                        <template #reference>
+                            <el-button type="warning" style="flex: 1">退出登录</el-button>
+                        </template>
+                    </el-popconfirm>
+                    <el-popconfirm title="确定要注销吗" @confirm="deregistration">
+                        <template #reference>
+                            <el-button type="danger" style="flex: 1">注销</el-button>
+                        </template>
+                    </el-popconfirm>
+                    <el-button type="primary" style="flex: 1" @click="goingEdit">编辑</el-button>
+                </div>
             </div>
-            <div class="user-item">
-                <div>用户名:</div>
-                <div>{{ user.user_name }}</div>
+            <el-divider content-position="left">关注</el-divider>
+            <div class="user-follows">
+                <el-space wrap>
+                    <UserCard
+                        v-for="user in UserStore.currentUser.origin.follows"
+                        :key="user._id"
+                        :user="user"
+                    ></UserCard>
+                </el-space>
             </div>
-            <div class="user-item">
-                <div>账号:</div>
-                <div>{{ user.account }}</div>
-            </div>
-            <div class="btn-box">
-                <el-popconfirm title="确定退出登录吗" @confirm="quitLogin">
-                    <template #reference>
-                        <el-button type="warning" style="flex: 1">退出登录</el-button>
-                    </template>
-                </el-popconfirm>
-                <el-popconfirm title="确定要注销吗" @confirm="deregistration">
-                    <template #reference>
-                        <el-button type="danger" style="flex: 1">注销</el-button>
-                    </template>
-                </el-popconfirm>
-                <el-button type="primary" style="flex: 1" @click="goingEdit">编辑</el-button>
-            </div>
+        </el-card>
+        <el-card class="right">
+            <el-tabs v-model="activeName">
+                <el-tab-pane label="发布的帖子" name="published">
+                    <UserPublished></UserPublished>
+                </el-tab-pane>
+                <el-tab-pane label="收藏的帖子" name="favorites">
+                    <UserFavorites></UserFavorites>
+                </el-tab-pane>
+            </el-tabs>
         </el-card>
     </div>
 </template>
 
 <script setup lang="ts">
+import UserCard from '../card/User-Card.vue'
+import UserFavorites from '../posts/User-Favorites.vue'
+import UserPublished from '../posts/User-Published.vue'
+
 import { avatarURL } from '@/utils/index'
 import { useUserStore } from '@/stores/user'
 import { useStatusStore } from '@/stores/status'
 import { ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
+import { ref } from 'vue'
 
+//初始化
+//#region
 //获取User
 const UserStore = useUserStore()
 const user = UserStore.currentUser.origin
 //获取状态管理
 const StatusStore = useStatusStore()
+//默认指向发布tab
+const activeName = ref<string>('published')
+//#endregion
+
 //用户相关的逻辑
 //#region
 //退出登录
@@ -89,25 +118,47 @@ function goingEdit() {
 //#endregion
 </script>
 
-<style scoped>
-.user-info {
+<style lang="less" scoped>
+.container {
     display: flex;
-    flex-direction: column;
-    width: 80%;
-    min-height: 500px;
-    margin: 0 auto;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: center;
-}
-.user-item {
-    margin: 30px;
-    display: flex;
-    justify-content: center;
-    font-size: 30px;
-    font-weight: bold;
-}
-.btn-box {
-    display: flex;
+    .left {
+        margin: 10px;
+        flex: 0.3;
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        .user-info {
+            .user-avatar{
+                
+            }
+            .user-item {
+                margin: 10px 0;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                font-size: 30px;
+                font-weight: bold;
+                * {
+                    margin: 5px 0;
+                }
+                span {
+                    color: rgb(189, 189, 189);
+                    font-weight: normal;
+                }
+            }
+            .btn-box {
+                display: flex;
+            }
+        }
+        .user-follows {
+            display: flex;
+        }
+    }
+    .right {
+        margin: 10px;
+        flex: 0.7;
+    }
 }
 </style>

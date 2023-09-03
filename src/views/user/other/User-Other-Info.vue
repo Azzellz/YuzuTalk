@@ -98,6 +98,7 @@ async function follow() {
             offset: 80
         })
         isFollowed.value = true
+        await UserStore.getCurrentUser()
     } catch (error) {
         ElMessage.error({
             message: '关注失败',
@@ -118,6 +119,7 @@ async function unFollow() {
             offset: 80
         })
         isFollowed.value = false
+        await UserStore.getCurrentUser()
     } catch (error) {
         ElMessage.error({
             message: '取注失败',

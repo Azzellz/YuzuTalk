@@ -1,3 +1,4 @@
+import { serverIpAddress } from '@/utils'
 import axios from 'axios'
 import { nanoid } from 'nanoid'
 import type { App } from 'vue'
@@ -5,13 +6,13 @@ import type { App } from 'vue'
 export default {
   install(app:App) {
     //配置axios的根路径
-    axios.defaults.baseURL = 'http://localhost:4000/'
+    axios.defaults.baseURL = `${serverIpAddress}/`
 
     //配置全局工具api
     app.config.globalProperties.$axios = axios
     app.config.globalProperties.$nanoid = nanoid
     app.config.globalProperties.$avatarURL = (avatar:string) => {
-      return `http://localhost:4000/user_avatar/${avatar}`
+      return `${serverIpAddress}/user_avatar/${avatar}`
     }
     //配置全局枚举变量
     app.config.globalProperties.$enum = {
