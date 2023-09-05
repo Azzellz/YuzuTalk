@@ -1,21 +1,18 @@
 import { defineStore } from 'pinia'
 import { type Post } from '@/models/post/interface'
 import { usePostStore } from './post'
-
-const PostStore = usePostStore()
+import pinia from '.'
+//!这里要传入同个pinia实例
+const PostStore = usePostStore(pinia)
 //记录状态
 export const useStatusStore = defineStore('status', {
   state: () => ({
     //是否正处于post编辑状态
     isEditing: false,
+    //是否打开了Yuzu
+    isYuzu:false,
     //存储当前博客
     currentPost: {} as Post,
-    //存储当前博客列表
-    // currentPostList: {
-    //   list: [] as Post[],
-    //   total: 0,
-    //   from: '' //来源
-    // }
   }),
   actions: {
     //更新当前博客

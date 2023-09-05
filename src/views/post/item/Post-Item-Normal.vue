@@ -1,18 +1,18 @@
 <template>
   <div class="post-box">
-    <h1 class="post-title">{{ currentPost.title }}</h1>
+    <h1 class="post-title">{{ StatusStore.currentPost.title }}</h1>
     <h6 class="info-box">
-      <template v-if="!currentPost.isUnknown">
+      <template v-if="!StatusStore.currentPost.isUnknown">
         <router-link
           :to="{
             path: '/user/other',
             query: {
-              id: currentPost.user._id,
-              title: currentPost.user.user_name
+              id: StatusStore.currentPost.user._id,
+              title: StatusStore.currentPost.user.user_name
             }
           }"
         >
-          <el-avatar :size="40" :src="avatarURL(currentPost.user.avatar)"></el-avatar>
+          <el-avatar :size="40" :src="avatarURL(StatusStore.currentPost.user.avatar)"></el-avatar>
         </router-link>
 
         <div class="info-text">{{ postInfo }}</div>
@@ -24,7 +24,7 @@
 
       <div class="info-tags">
         <el-tag
-          v-for="(tag, index) in currentPost.tags"
+          v-for="(tag, index) in StatusStore.currentPost.tags"
           :key="index"
           :disable-transitions="false"
           style="margin: 5px"
@@ -34,7 +34,7 @@
       </div>
     </h6>
     <el-divider>内容</el-divider>
-    <el-card class="content-box">{{ currentPost.content }}</el-card>
+    <el-card class="content-box">{{ StatusStore.currentPost.content }}</el-card>
     <el-divider>评论</el-divider>
     <PostComment></PostComment>
   </div>
@@ -42,20 +42,18 @@
 
 <script setup lang="ts">
 import PostComment from '../comment/Post-Comment.vue'
-import { type Post } from '@/models/post/interface'
 import { avatarURL } from '@/utils/index'
 import { computed } from 'vue'
 import { useStatusStore } from '@/stores/status'
 const StatusStore = useStatusStore()
-//获取当前帖子
-const currentPost: Post = StatusStore.currentPost
+//获取当前帖子,获取响应式的引用
 //非匿名帖子的信息
 const postInfo = computed(() => {
-  return `${currentPost.user.user_name} 于 ${currentPost.format_time} 发布 | 👍:${currentPost.support} 👎:${currentPost.oppose} | 评论数:${currentPost.comments.length}`
+  return `${StatusStore.currentPost.user.user_name} 于 ${StatusStore.currentPost.format_time} 发布 | 👍:${StatusStore.currentPost.support} 👎:${StatusStore.currentPost.oppose} | 评论数:${StatusStore.currentPost.comments.length}`
 })
 //匿名的帖子信息
 const unknownPostInfo = computed(() => {
-  return `匿名用户 于 ${currentPost.format_time} 发布 | 👍:${currentPost.support} 👎:${currentPost.oppose} | 评论数:${currentPost.comments.length}`
+  return `匿名用户 于 ${StatusStore.currentPost.format_time} 发布 | 👍:${StatusStore.currentPost.support} 👎:${StatusStore.currentPost.oppose} | 评论数:${StatusStore.currentPost.comments.length}`
 })
 </script>
 

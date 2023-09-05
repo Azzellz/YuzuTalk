@@ -127,14 +127,17 @@ async function save() {
 <style scoped>
 .container {
     display: flex;
+    padding: 50px;
     .left {
         margin: 10px;
         flex: 0.3;
+        height: 700px;
         display: flex;
         flex-direction: column;
         flex-wrap: wrap;
         justify-content: space-between;
         align-items: center;
+
         .user-info {
             display: flex;
             flex-direction: column;
@@ -159,6 +162,8 @@ async function save() {
     .right {
         margin: 10px;
         flex: 0.7;
+        height: 700px;
+        overflow: auto;
     }
 }
 </style>

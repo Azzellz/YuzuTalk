@@ -19,7 +19,7 @@
         title="关闭"
         trigger="hover"
         content="这将关闭评论区"
-        v-if="currentPost.isCommentable"
+        v-if="StatusStore.currentPost.isCommentable"
       >
         <template #reference>
           <el-button type="danger" @click="closeComment" icon="Close">关闭评论区</el-button>
@@ -53,7 +53,7 @@
     <el-divider></el-divider>
     <div>
       <Post-Comment-Card-Edit
-        v-for="(comment, index) in currentPost.comments"
+        v-for="(comment, index) in StatusStore.currentPost.comments"
         :key="comment._id"
         :comment="comment"
         :index="index"
@@ -70,20 +70,19 @@ import PostCommentCardEdit from './Post-Comment-Card-Edit.vue';
 import { useStatusStore } from '@/stores/status'
 import { usePostStore } from '@/stores/post'
 import { ElMessage } from 'element-plus'
-import type { Comment, Post } from '@/models/post/interface';
+import type { Comment } from '@/models/post/interface';
 
 //获取PostStore状态管理
 const PostStore = usePostStore()
 
 //获取当前Post的引用
 const StatusStore = useStatusStore()
-const currentPost: Post = StatusStore.currentPost
 //评论区管理的逻辑
 //#region
 //删除当前文章
 async function deleteCurrentPost() {
   try {
-    await PostStore.deletePost(currentPost._id)
+    await PostStore.deletePost(StatusStore.currentPost._id)
     //这里应该更新一下总数据源
     //回退的上一页
     history.back()
@@ -103,7 +102,7 @@ async function deleteCurrentPost() {
 //删除所有评论
 function deleteAllComments() {
   //清空当前文章的评论
-  currentPost.comments = []
+  StatusStore.currentPost.comments = []
   ElMessage.success({
     message: '全部删除成功',
     offset: 80
@@ -115,12 +114,12 @@ function deleteOneComment(index: number) {
     message: '删除成功',
     offset: 80
   })
-  currentPost.comments.splice(index, 1)
+  StatusStore.currentPost.comments.splice(index, 1)
 }
 //顶置评论
 function topComment(comment: Comment, currentIndex: number) {
-  currentPost.comments.splice(currentIndex, 1)
-  currentPost.comments.unshift(comment)
+  StatusStore.currentPost.comments.splice(currentIndex, 1)
+  StatusStore.currentPost.comments.unshift(comment)
   ElMessage.success({
     message: '顶置成功',
     offset: 80
@@ -128,7 +127,7 @@ function topComment(comment: Comment, currentIndex: number) {
 }
 //关闭评论区
 function closeComment() {
-  currentPost.isCommentable = false
+  StatusStore.currentPost.isCommentable = false
   ElMessage.error({
     message: '评论区关闭成功,保存后生效',
     offset: 80
@@ -136,7 +135,7 @@ function closeComment() {
 }
 //打开评论区
 function openComment() {
-  currentPost.isCommentable = true
+  StatusStore.currentPost.isCommentable = true
   ElMessage.success({
     message: '评论区打开成功,保存后生效',
     offset: 80

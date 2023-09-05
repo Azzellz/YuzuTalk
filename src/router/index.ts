@@ -12,7 +12,8 @@ const router = createRouter({
             path: '/door',
             component: () => import('@/views/door/Door-View.vue'),
             meta: {
-                hideHeader: true
+                isHideHeader: true,
+                isHideAside:true
             },
             beforeEnter: () => {
                 //在这里判断是否已经有token,如果有则直接导航到首页
@@ -27,7 +28,7 @@ const router = createRouter({
             path: '/home',
             component: () => import('@/views/home/Home-View.vue'),
             meta: {
-                hideAside: true
+                isHideAside: true
             },
             beforeEnter: () => {
                 //在这里判断是否已经有token,如果有则直接导航到首页
@@ -85,10 +86,6 @@ const router = createRouter({
             },
             children: [
                 {
-                    path: 'follows',
-                    component: () => import('@/views/user/info/User-Follows.vue')
-                },
-                {
                     path: 'info',
                     component: () => import('@/views/user/info/User-Info.vue')
                 },
@@ -104,7 +101,7 @@ const router = createRouter({
                     path: 'other',
                     component: () => import('@/views/user/other/User-Other-Info.vue'),
                     meta: {
-                        hideAside: true //展示其他用户信息时隐藏侧边栏,注意,meta以这里的为主,其他地方的会被覆盖
+                        isHideAside: true //展示其他用户信息时隐藏侧边栏,注意,meta以这里的为主,其他地方的会被覆盖
                     },
                     beforeEnter: (to) => {
                         //在这里判断是否是当前用户的id,如果是,则跳转到info页面

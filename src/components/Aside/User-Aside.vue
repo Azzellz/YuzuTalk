@@ -20,18 +20,6 @@
                     <span>资料</span>
                 </template>
             </el-menu-item>
-            <el-menu-item index="/user/published">
-                <template #title>
-                    <el-icon><ChatLineSquare /></el-icon>
-                    <span>帖子</span>
-                </template>
-            </el-menu-item>
-            <el-menu-item index="/user/favorites">
-                <template #title>
-                    <el-icon><Star /></el-icon>
-                    <span>收藏</span>
-                </template>
-            </el-menu-item>
         </el-menu>
     </div>
 </template>

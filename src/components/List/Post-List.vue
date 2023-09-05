@@ -1,16 +1,21 @@
 <template>
     <div class="container">
+        <!-- 搜索功能 -->
         <el-input placeholder="搜索" suffix-icon="Search" class="search" v-model="keyword">
         </el-input>
         <!-- 用组过渡每个post -->
-        <PostCard
-            v-for="post in postList.list"
-            :key="post._id"
-            :post="post"
-            :FROM="postList.FROM"
-            :pageSize="pageSize"
-            :currentPage="currentPage"
-        ></PostCard>
+        <!-- 列表展示 -->
+        <el-scrollbar>
+            <PostCard
+                v-for="post in postList.list"
+                :key="post._id"
+                :post="post"
+                :FROM="postList.FROM"
+                :pageSize="pageSize"
+                :currentPage="currentPage"
+            ></PostCard>
+        </el-scrollbar>
+        <!-- 分页的逻辑 -->
         <div class="page-box">
             <el-pagination
                 @size-change="handleSizeChange"
@@ -30,12 +35,19 @@
 import PostCard from '@/views/post/card/Post-Card.vue'
 import type { PaginatedPostList } from '@/models/post/interface'
 import { ref, watch } from 'vue'
-import { type GetPostOption } from '../../models/post/interface/index'
+import { type GetPostOption } from '@/models/post/interface/index'
 
 //声明接收list数据源
-defineProps<{
-    postList: PaginatedPostList
-}>()
+withDefaults(
+    defineProps<{
+        postList: PaginatedPostList //要渲染的列表
+        listHeight?: number //list的高度
+    }>(),
+    {
+        listHeight:650
+    }
+)
+
 //定义getPosts事件:对于不同的postList,有不同的getPosts方法
 const emit = defineEmits<{
     getPosts: [option: GetPostOption]
@@ -82,20 +94,20 @@ watch(keyword, async (newKeyword: string) => {
 //#endregion
 </script>
 
-<style scoped>
+<style lang="less" scoped>
 .container {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    flex-wrap: wrap;
-}
-.page-box {
-    margin: 20px;
-}
-.search {
-    width: 50%;
-    margin: 20px;
-    height: 40px;
+
+    .page-box {
+        margin: 20px;
+    }
+    .search {
+        width: 50%;
+        margin: 20px;
+        height: 40px;
+    }
 }
 </style>

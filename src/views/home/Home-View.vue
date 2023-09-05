@@ -2,28 +2,31 @@
     <div class="container">
         <div class="recent-posts">
             <h1 style="text-align: center">最新</h1>
-            <PostCard
-                v-for="post in PostStore.latestPosts.list"
-                :key="post._id"
-                :post="post"
-                :FROM="POST_FROM.LATEST_POSTS"
-            />
+            <el-scrollbar>
+                <PostCard
+                    v-for="post in PostStore.latestPosts.list"
+                    :key="post._id"
+                    :post="post"
+                    :FROM="POST_FROM.LATEST_POSTS"
+                />
+            </el-scrollbar>
         </div>
         <div class="recent-users">
             <div class="hot-user-post">
-                <h1 style="text-align: center; margin: 20px">您</h1>
+                <h1 style="text-align: center; margin: 20px">
+                    {{ UserStore.currentUser.origin.user_name }}
+                </h1>
                 <!-- 本人 -->
                 <div class="user-box">
                     <UserAvatarRoute
                         :user="UserStore.currentUser.origin"
                         :options="{
                             fit: 'fill',
-                            style:'margin: 20px',
-                            size:120
+                            style: 'margin: 20px',
+                            size: 120
                         }"
                     ></UserAvatarRoute>
                     <div class="user-meta">
-                        <h1 style="color: black">{{ UserStore.currentUser.origin.user_name }}</h1>
                         <p>发表了{{ UserStore.currentUser.publishedPosts.total }}篇帖子</p>
                         <p>收藏了{{ UserStore.currentUser.favoritesPosts.total }}篇帖子</p>
                     </div>
@@ -101,6 +104,9 @@ try {
                 display: flex;
                 padding: 20px;
                 .user-meta {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-around;
                     padding: 25px;
                     line-height: 1.5;
                     flex: 1;

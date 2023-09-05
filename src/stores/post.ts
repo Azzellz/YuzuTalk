@@ -1,12 +1,13 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
 import { useRoute, type RouteLocationNormalizedLoaded } from 'vue-router'
-import { MainPosts,  LatestPosts} from '@/models/post/class'
-import type { GetPostOption, Post } from '@/models/post/interface'
+import { MainPosts,  LatestPosts, VisitedPosts} from '@/models/post/class'
+import type { GetPostOption, I_VisitedPost, Post } from '@/models/post/interface'
 import { POST_FROM } from '@/models/post/enum'
 import { useUserStore } from './user'
-
-const UserStore = useUserStore()
+import pinia from '.'
+//!这里要传入同个pinia实例
+const UserStore = useUserStore(pinia)
 
 //state约束
 interface PostState {
@@ -14,6 +15,8 @@ interface PostState {
     mainPosts: MainPosts
     //记录最新的post
     latestPosts: LatestPosts
+    //记录已经浏览过的post
+    visitedPosts:VisitedPosts
 }
 
 export const usePostStore = defineStore('post', {
@@ -22,7 +25,9 @@ export const usePostStore = defineStore('post', {
             //记录总post列表
             mainPosts: new MainPosts(),
             //记录最新的post
-            latestPosts: new LatestPosts()
+            latestPosts: new LatestPosts(),
+            //记录已经浏览过的post
+            visitedPosts: new VisitedPosts()
         }
     },
     actions: {
@@ -109,7 +114,7 @@ export const usePostStore = defineStore('post', {
             await axios.delete(`/post?post_id=${post_id}`)
         },
         //获取getOption
-        getOption(route?:RouteLocationNormalizedLoaded): GetPostOption {
+        getOption(route?: RouteLocationNormalizedLoaded): GetPostOption {
             if (!route) route = useRoute()
             //根据路由参数分割出currentPage和pageSize和keyword
             const option: GetPostOption = {
@@ -118,6 +123,14 @@ export const usePostStore = defineStore('post', {
                 keyword: route.query.keyword ? String(route.query.keyword) : ''
             }
             return option
+        },
+        //记录当前浏览的post
+        recordVisitedPost(post: Post, FROM: POST_FROM, currentPage?: number, pageSize?: number):void {
+            this.visitedPosts.recordPost(post, FROM, currentPage, pageSize)
+        },
+        //根据id找到
+        findVisitedPostById(post_id: string):I_VisitedPost|undefined{
+            return this.visitedPosts.findVisitedPostById(post_id)
         }
     }
 })

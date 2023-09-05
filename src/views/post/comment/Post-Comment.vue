@@ -1,6 +1,6 @@
 <template>
     <!-- 是否可见评论区 -->
-    <el-card v-if="currentPost.isCommentable" class="comment-container">
+    <el-card v-if="StatusStore.currentPost.isCommentable" class="comment-container">
         <div class="comment-edit-box">
             <el-input
                 type="textarea"
@@ -59,7 +59,7 @@
         <el-divider></el-divider>
         <div class="comment-display-box">
             <Post-Comment-Card
-                v-for="(comment, index) in currentPost.comments"
+                v-for="(comment, index) in StatusStore.currentPost.comments"
                 :key="comment._id"
                 :comment="comment"
                 :index="index"
@@ -89,10 +89,9 @@ import { usePostStore } from '@/stores/post'
 const StatusStore = useStatusStore()
 const PostStore = usePostStore()
 //引用props中的post
-let currentPost = StatusStore.currentPost
 //判断是否为作者
 const isAuthor = computed(() => {
-    return currentPost.user._id === localStorage.getItem('user_id')
+    return StatusStore.currentPost.user._id === localStorage.getItem('user_id')
 })
 //#endregion
 
@@ -105,7 +104,7 @@ try {
         data: { data }
     } = await axios.post('/user/isfavorite', {
         user_id: localStorage.getItem('user_id'),
-        post_id: currentPost._id
+        post_id: StatusStore.currentPost._id
     })
     isFavorite.value = data
 } catch (error) {
@@ -125,7 +124,7 @@ async function publishComment() {
     if (!commentContent.value) return ElMessage.error('评论不能为空')
     //要求内容：post(id),user(id),content,support,oppose
     const comment = {
-        post: currentPost._id,
+        post: StatusStore.currentPost._id,
         user: localStorage.getItem('user_id'),
         content: commentContent.value,
         support: 0,
@@ -139,7 +138,7 @@ async function publishComment() {
             data: { data }
         } = await axios.post('/comment', comment)
         //更新当前post引用
-        currentPost.comments.push(data)
+        StatusStore.currentPost.comments.push(data)
         //提示
         ElMessage.success({
             message: '评论成功',
@@ -159,9 +158,9 @@ async function publishComment() {
 //重新开启评论区
 async function openComment() {
     //更新当前帖子的评论区状态，设置为关闭
-    currentPost.isCommentable = true
+    StatusStore.currentPost.isCommentable = true
     //更新帖子
-    await PostStore.updatePost(currentPost)
+    await PostStore.updatePost(StatusStore.currentPost)
     ElMessage.success({
         message: '评论区开启成功',
         offset: 80
@@ -188,7 +187,7 @@ async function supportPost() {
     //给帖子点赞
     try {
         await axios.post('/support/post', {
-            post_id: currentPost._id
+            post_id: StatusStore.currentPost._id
         })
         ElMessage.success({
             message: '点赞成功',
@@ -197,7 +196,7 @@ async function supportPost() {
         //调用动态更新
         // await dynamicUpdate()
         //直接展示变化
-        currentPost.support++
+        StatusStore.currentPost.support++
     } catch (error) {
         console.log(error)
         ElMessage.error({
@@ -211,7 +210,7 @@ async function opposePost() {
     //给帖子点踩
     try {
         await axios.post('/oppose/post', {
-            post_id: currentPost._id
+            post_id: StatusStore.currentPost._id
         })
         ElMessage.success({
             message: '点踩成功',
@@ -220,7 +219,7 @@ async function opposePost() {
         //调用动态更新
         // await dynamicUpdate()
         //直接展示变化
-        currentPost.oppose++
+        StatusStore.currentPost.oppose++
     } catch (error) {
         console.log(error)
         ElMessage.error({
@@ -234,7 +233,7 @@ async function favoritePost() {
     //收藏帖子
     try {
         await axios.post('/favorite/post', {
-            post_id: currentPost._id,
+            post_id: StatusStore.currentPost._id,
             user_id: localStorage.getItem('user_id')
         })
         ElMessage.success({
@@ -256,7 +255,7 @@ async function unfavoritePost() {
     //取消收藏帖子
     try {
         await axios.post('/unfavorite/post', {
-            post_id: currentPost._id,
+            post_id: StatusStore.currentPost._id,
             user_id: localStorage.getItem('user_id')
         })
         ElMessage.success({

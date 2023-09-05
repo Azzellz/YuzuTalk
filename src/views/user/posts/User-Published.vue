@@ -6,7 +6,7 @@
 import PostList from '@/components/List/Post-List.vue'
 import { usePostStore } from '@/stores/post'
 import { type GetPostOption } from '../../../models/post/interface/index'
-import { useUserStore } from '@/stores/user';
+import { useUserStore } from '@/stores/user'
 //获取仓库
 const PostStore = usePostStore()
 const UserStore = useUserStore()
@@ -17,9 +17,7 @@ async function getPosts(option: GetPostOption) {
 }
 //先初始化获取数据
 try {
-    if (UserStore.currentUser.publishedPosts.isEmpty()) {
-        await PostStore.getCurrentUserPublishedPosts()
-    }
+    await PostStore.getCurrentUserPublishedPosts()
 } catch (error) {
     console.log(error)
 }

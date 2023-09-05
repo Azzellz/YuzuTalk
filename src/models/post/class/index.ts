@@ -1,8 +1,15 @@
 import axios from 'axios'
 import { POST_FROM } from '../enum'
-import type { GetPostOption, PaginatedPostList, Post, PostList } from '../interface'
+import type {
+    GetPostOption,
+    I_VisitedPost,
+    I_VisitedPosts,
+    PaginatedPostList,
+    Post,
+    PostList
+} from '../interface'
 import type { GetPostResponse } from '../interface/index'
-import type { I_User,I_OtherUser } from '@/models/user/interface'
+import type { I_User, I_OtherUser } from '@/models/user/interface'
 import { DefaultGetOption } from '../const'
 
 //!注意,这里是拿不到pinia实例的数据的!
@@ -14,8 +21,7 @@ export class MainPosts implements PaginatedPostList {
     total: number = 0
     currentPage: number = 0
     pageSize: number = 10
-    constructor() {
-    }
+    constructor() {}
 
     async getPosts(option?: GetPostOption) {
         //检查是否有参数传入,没有就使用默认值
@@ -53,8 +59,7 @@ export class LatestPosts implements PostList {
     //限制最多展示10篇文章
     postLimit: number = 10
 
-    constructor() {
-    }
+    constructor() {}
 
     async getPosts(limit: number) {
         try {
@@ -71,6 +76,31 @@ export class LatestPosts implements PostList {
     }
     isEmpty() {
         return this.list.length === 0
+    }
+}
+//VisitedPosts类
+//TODO 要求能根据列表中的数据来源动态更新
+export class VisitedPosts implements I_VisitedPosts {
+    readonly list: Array<I_VisitedPost> = []
+    constructor() {}
+    //记录浏览过的post
+    recordPost(post: Post, FROM: POST_FROM, currentPage: number = 0, pageSize: number = 10) {
+        const visitedPost: I_VisitedPost = {
+            ...post,
+            FROM,
+            currentPage,
+            pageSize
+        }
+        this.list.push(visitedPost)
+    }
+    //判断是否为空的方法
+    isEmpty(): boolean {
+        return this.list.length === 0
+    }
+    findVisitedPostById(post_id:string):I_VisitedPost|undefined{
+        return this.list.find((post)=>{
+            return post._id===post_id
+        })
     }
 }
 //PublishedPosts类,有泛型参数,用来指明是当前用户还是其他用户
@@ -126,7 +156,7 @@ export class FavoritesPosts<U extends I_User | I_OtherUser> implements Paginated
     constructor(FROM: POST_FROM) {
         this.FROM = FROM
     }
-    
+
     async getPosts(option?: GetPostOption) {
         //检查是否有参数传入,没有就使用默认值
         if (!option) option = DefaultGetOption
