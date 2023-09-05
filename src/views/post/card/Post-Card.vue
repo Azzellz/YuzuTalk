@@ -49,11 +49,11 @@
 import { computed } from 'vue'
 import { getBetterFormatTime, avatarURL } from '@/utils/index'
 import type { POST_FROM } from '@/models/post/enum'
-import type { Post } from '@/models/post/interface'
+import type { I_Post } from '@/models/post/interface'
 
 //声明接收props
 const props = defineProps<{
-    post: Post
+    post: I_Post
     FROM: POST_FROM
     currentPage?: number
     pageSize?: number

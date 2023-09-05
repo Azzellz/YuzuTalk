@@ -39,18 +39,18 @@
 
 <script setup lang="ts">
 import UserAvatarRoute from '@/components/User/User-Avatar-Route.vue'
-import type { Comment } from '@/models/post/interface'
+import type { I_Comment } from '@/models/post/interface'
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
 //定义Props
 defineProps<{
-    comment: Comment
+    comment: I_Comment
     index: number
 }>()
 //评论相关操作的逻辑
 //#region
 //给评论点赞
-async function supportComment(comment: Comment) {
+async function supportComment(comment: I_Comment) {
     const comment_id = comment._id
     const post_id = comment.post._id
     //给评论点赞
@@ -74,7 +74,7 @@ async function supportComment(comment: Comment) {
     }
 }
 //给评论点踩
-async function opposeComment(comment: Comment) {
+async function opposeComment(comment: I_Comment) {
     const comment_id = comment._id
     const post_id = comment.post._id
     try {
