@@ -10,8 +10,9 @@ import { useStatusStore } from '@/stores/status'
 import { useRouter, useRoute, type RouteLocationNormalized } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { onBeforeUnmount, watch } from 'vue'
-import type { POST_FROM } from '@/models/post/enum'
+import { type POST_FROM } from '@/models/post/enum'
 import { usePostStore } from '@/stores/post'
+import { type Post } from '@/models/post/interface/index'
 
 //定义要接收的Props
 //这里只需要接收id即可
@@ -62,6 +63,8 @@ watch(route, async (newRoute: RouteLocationNormalized) => {
 onBeforeUnmount(() => {
     //离开页面时,强制结束编辑状态
     StatusStore.isEditing = false
+    //清空当前访问的post
+    StatusStore.currentPost = {} as Post
     //调用动态更新数据源方法
     //注意!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     //离开时动态更新数据源,让用户离开界面后能看到PostCard的改变

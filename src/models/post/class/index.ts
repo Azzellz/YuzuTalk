@@ -81,7 +81,7 @@ export class LatestPosts implements PostList {
 //VisitedPosts类
 //TODO 要求能根据列表中的数据来源动态更新
 export class VisitedPosts implements I_VisitedPosts {
-    readonly list: Array<I_VisitedPost> = []
+    list: Array<I_VisitedPost> = []
     constructor() {}
     //记录浏览过的post
     recordPost(post: Post, FROM: POST_FROM, currentPage: number = 0, pageSize: number = 10) {
@@ -97,10 +97,15 @@ export class VisitedPosts implements I_VisitedPosts {
     isEmpty(): boolean {
         return this.list.length === 0
     }
+    //根据id找
     findVisitedPostById(post_id:string):I_VisitedPost|undefined{
         return this.list.find((post)=>{
             return post._id===post_id
         })
+    }
+    //根据filter回调函数过滤list
+    filterVisitedPosts(filter:(post:I_VisitedPost)=>boolean){
+        this.list = this.list.filter(filter)
     }
 }
 //PublishedPosts类,有泛型参数,用来指明是当前用户还是其他用户

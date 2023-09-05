@@ -131,6 +131,9 @@ export const usePostStore = defineStore('post', {
         //根据id找到
         findVisitedPostById(post_id: string):I_VisitedPost|undefined{
             return this.visitedPosts.findVisitedPostById(post_id)
+        },
+        filterVisitedPosts(fitler:(post:I_VisitedPost)=>boolean){
+            this.visitedPosts.filterVisitedPosts(fitler)
         }
     }
 })
