@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
 import { useRoute, type RouteLocationNormalizedLoaded } from 'vue-router'
-import { MainPosts,  LatestPosts, VisitedPosts} from '@/models/post/class'
+import { MainPosts,  LatestPosts, VisitedPosts, Post} from '@/models/post/class'
 import type { I_GetPostOption, I_VisitedPost, I_Post } from '@/models/post/interface'
 import { POST_FROM } from '@/models/post/enum'
 import { useUserStore } from './user'
@@ -18,7 +18,7 @@ interface PostState {
     //记录已经浏览过的post
     visitedPosts: VisitedPosts
     //记录当前的post
-    currentPost: I_Post
+    currentPost: Post
 }
 
 export const usePostStore = defineStore('post', {
@@ -31,7 +31,7 @@ export const usePostStore = defineStore('post', {
             //记录已经浏览过的post
             visitedPosts: new VisitedPosts(),
             //记录当前浏览的post
-            currentPost: {} as I_Post
+            currentPost: new Post()
         }
     },
     actions: {
@@ -87,7 +87,7 @@ export const usePostStore = defineStore('post', {
             const {
                 data: { data }
             } = await axios.get(`/post?id=${id}`)
-            this.currentPost = data
+            this.currentPost= new Post(data as I_Post)
         },
         //获取最新的十篇文章
         async getLatestPosts(limit?: number) {

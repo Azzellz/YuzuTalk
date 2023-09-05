@@ -25,7 +25,7 @@ export interface I_PublishPost {
     content: string //正文
     tags: Array<string> //标签
     //发布时只需要初始化,所以不需要很细的接口限制
-    comments: Array<object> //评论
+    comments: Array<I_Comment> //评论
     support: number //帖子点赞数
     oppose: number //帖子反对数
     follow: number //收藏数
