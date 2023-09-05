@@ -29,13 +29,13 @@ const StatusStore = useStatusStore()
 const PostStore = usePostStore()
 try {
     //让StatusStore获取当前文章的引用
-    await StatusStore.getPost(props.id)
+    await PostStore.getPost(props.id)
     //记录当前浏览的post
     //先判断是否已经在队列中了
-    const post = PostStore.findVisitedPostById(StatusStore.currentPost._id)
+    const post = PostStore.findVisitedPostById(PostStore.currentPost._id)
     if (!post) {
         PostStore.recordVisitedPost(
-            StatusStore.currentPost,
+            PostStore.currentPost,
             props.FROM,
             props.currentPage,
             props.pageSize
@@ -54,7 +54,7 @@ try {
 const route = useRoute()
 watch(route, async (newRoute: RouteLocationNormalized) => {
     //路由改变时重新获取post
-    await StatusStore.getPost(newRoute.query.id as string)
+    await PostStore.getPost(newRoute.query.id as string)
     //关闭编辑状态
     StatusStore.isEditing = false
 })
@@ -64,7 +64,7 @@ onBeforeUnmount(() => {
     //离开页面时,强制结束编辑状态
     StatusStore.isEditing = false
     //清空当前访问的post
-    StatusStore.currentPost = {} as Post
+    PostStore.currentPost = {} as Post
     //调用动态更新数据源方法
     //注意!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     //离开时动态更新数据源,让用户离开界面后能看到PostCard的改变

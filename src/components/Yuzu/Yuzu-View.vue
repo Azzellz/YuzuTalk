@@ -75,11 +75,11 @@ const showTip = (content: string, delay: number = 3000): void => {
 
 //#endregion
 //动态selectKey
-//#region 
-const selectKey = computed(()=>{
+//#region
+const selectKey = computed(() => {
     //如果currentPost不存在_id属性,说明当前不在Item界面,所以将select设置为空
-    if (!StatusStore.currentPost._id) return ''
-    else return StatusStore.currentPost._id
+    if (!PostStore.currentPost._id) return ''
+    else return PostStore.currentPost._id
 })
 //#endregion
 //选择post:跳转到目标路由
@@ -105,7 +105,7 @@ async function goToVisitedPost(pane: TabsPaneContext) {
 function deleteVisitedPost(tabName: TabPaneName) {
     //拿到被删除的post_id
     const post_id: string = tabName.toString()
-    if (post_id === StatusStore.currentPost._id) {
+    if (post_id === PostStore.currentPost._id) {
         //不能删除当前正在访问的post
         //展示提示
         showTip('tip:不能删除当前正在浏览的post')
@@ -116,13 +116,17 @@ function deleteVisitedPost(tabName: TabPaneName) {
         return post._id !== post_id
     })
 }
+//过滤相关
+//#region
 //展示选中post的过滤内容
 const filterContent = computed(() => {
-    return StatusStore.currentPost.content?.slice(0, 10) + '...'
+    return PostStore.currentPost.content?.slice(0, 10) + '...'
 })
-const filterTitle = (title:string):string=>{
-    return title.length>10?title.slice(0,10)+'...':title
+const filterTitle = (title: string): string => {
+    return title.length > 10 ? title.slice(0, 10) + '...' : title
 }
+//#endregion
+
 //#endregion
 </script>
 
