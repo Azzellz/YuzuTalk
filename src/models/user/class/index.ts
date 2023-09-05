@@ -3,7 +3,7 @@ import { PublishedPosts, FavoritesPosts } from '../../post/class/index'
 import axios from 'axios'
 import { POST_FROM } from '@/models/post/enum'
 
-abstract class User<U> {
+abstract class Abstract_User<U extends I_User | I_OtherUser | Array<I_OtherUser>> {
     public origin: U
     constructor(u: U) {
         this.origin = u
@@ -13,7 +13,7 @@ abstract class User<U> {
 }
 
 //当前用户信息
-export class CurrentUser extends User<I_User> {
+export class CurrentUser extends Abstract_User<I_User> {
     publishedPosts: PublishedPosts<I_User> = new PublishedPosts<I_User>(
         POST_FROM.CURRENT_USER_PUBLISHED_POSTS
     )
@@ -48,7 +48,7 @@ export class CurrentUser extends User<I_User> {
 }
 
 //当前浏览的其他用户信息
-export class OtherUser extends User<I_OtherUser> {
+export class OtherUser extends Abstract_User<I_OtherUser> {
     publishedPosts: PublishedPosts<I_OtherUser> = new PublishedPosts<I_OtherUser>(
         POST_FROM.OTHER_USER_PUBLISHED_POSTS
     )
@@ -63,7 +63,7 @@ export class OtherUser extends User<I_OtherUser> {
 }
 
 //最近注册的所有用户信息
-export class RecentUsers extends User<Array<I_OtherUser>> {
+export class RecentUsers extends Abstract_User<Array<I_OtherUser>> {
     constructor() {
         //初始化
         super([] as Array<I_OtherUser>)

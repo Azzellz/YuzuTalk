@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
 import { useRoute, type RouteLocationNormalizedLoaded } from 'vue-router'
-import { MainPosts,  LatestPosts, VisitedPosts} from '@/models/post/class'
-import type { GetPostOption, I_VisitedPost, Post } from '@/models/post/interface'
+import { MainPosts,  LatestPosts, VisitedPosts, Post} from '@/models/post/class'
+import type { I_GetPostOption, I_VisitedPost, I_Post } from '@/models/post/interface'
 import { POST_FROM } from '@/models/post/enum'
 import { useUserStore } from './user'
 import pinia from '.'
@@ -16,9 +16,9 @@ interface PostState {
     //记录最新的post
     latestPosts: LatestPosts
     //记录已经浏览过的post
-    visitedPosts:VisitedPosts
+    visitedPosts: VisitedPosts
     //记录当前的post
-    currentPost: Post,
+    currentPost: Post
 }
 
 export const usePostStore = defineStore('post', {
@@ -31,7 +31,7 @@ export const usePostStore = defineStore('post', {
             //记录已经浏览过的post
             visitedPosts: new VisitedPosts(),
             //记录当前浏览的post
-            currentPost: {} as Post
+            currentPost: new Post()
         }
     },
     actions: {
@@ -79,7 +79,7 @@ export const usePostStore = defineStore('post', {
             }
         },
         //根据条件获取post列表
-        async getPosts(option?: GetPostOption) {
+        async getPosts(option?: I_GetPostOption) {
             await this.mainPosts.getPosts(option)
         },
         //根据id获取post,同时也可以起到更新的作用
@@ -87,7 +87,7 @@ export const usePostStore = defineStore('post', {
             const {
                 data: { data }
             } = await axios.get(`/post?id=${id}`)
-            this.currentPost = data
+            this.currentPost= new Post(data as I_Post)
         },
         //获取最新的十篇文章
         async getLatestPosts(limit?: number) {
@@ -96,21 +96,21 @@ export const usePostStore = defineStore('post', {
             await this.latestPosts.getPosts(limit)
         },
         //获取当前用户发布的post
-        async getCurrentUserPublishedPosts(option?: GetPostOption) {
+        async getCurrentUserPublishedPosts(option?: I_GetPostOption) {
             await UserStore.currentUser.publishedPosts.getPosts(option)
         },
         //获取当前用户收藏的post
-        async getCurrentUserFavoritesPosts(option?: GetPostOption) {
+        async getCurrentUserFavoritesPosts(option?: I_GetPostOption) {
             await UserStore.currentUser.favoritesPosts.getPosts(option)
         },
-        async getOtherUserPublishedPosts(option?: GetPostOption) {
+        async getOtherUserPublishedPosts(option?: I_GetPostOption) {
             await UserStore.otherUser.publishedPosts.getPosts(option)
         },
-        async getOtherUserFavoritesPosts(option?: GetPostOption) {
+        async getOtherUserFavoritesPosts(option?: I_GetPostOption) {
             await UserStore.otherUser.favoritesPosts.getPosts(option)
         },
         //直接将整个post对象传入,替换数据库内具有相同id的post
-        async updatePost(new_post: Post) {
+        async updatePost(new_post: I_Post) {
             await axios.put(`/post`, new_post)
         },
         //删除post
@@ -118,10 +118,10 @@ export const usePostStore = defineStore('post', {
             await axios.delete(`/post?post_id=${post_id}`)
         },
         //获取getOption
-        getOption(route?: RouteLocationNormalizedLoaded): GetPostOption {
+        getOption(route?: RouteLocationNormalizedLoaded): I_GetPostOption {
             if (!route) route = useRoute()
             //根据路由参数分割出currentPage和pageSize和keyword
-            const option: GetPostOption = {
+            const option: I_GetPostOption = {
                 currentPage: route.query.currentPage ? Number(route.query.currentPage) : 1,
                 pageSize: route.query.pageSize ? Number(route.query.pageSize) : 10,
                 keyword: route.query.keyword ? String(route.query.keyword) : ''
@@ -129,14 +129,19 @@ export const usePostStore = defineStore('post', {
             return option
         },
         //记录当前浏览的post
-        recordVisitedPost(post: Post, FROM: POST_FROM, currentPage?: number, pageSize?: number):void {
+        recordVisitedPost(
+            post: I_Post,
+            FROM: POST_FROM,
+            currentPage?: number,
+            pageSize?: number
+        ): void {
             this.visitedPosts.recordPost(post, FROM, currentPage, pageSize)
         },
         //根据id找到
-        findVisitedPostById(post_id: string):I_VisitedPost|undefined{
+        findVisitedPostById(post_id: string): I_VisitedPost | undefined {
             return this.visitedPosts.findVisitedPostById(post_id)
         },
-        filterVisitedPosts(fitler:(post:I_VisitedPost)=>boolean){
+        filterVisitedPosts(fitler: (post: I_VisitedPost) => boolean) {
             this.visitedPosts.filterVisitedPosts(fitler)
         }
     }

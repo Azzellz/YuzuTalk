@@ -33,14 +33,14 @@
 
 <script setup lang="ts">
 import PostCard from '@/views/post/card/Post-Card.vue'
-import type { PaginatedPostList } from '@/models/post/interface'
+import type { I_PaginatedPostList } from '@/models/post/interface'
 import { ref, watch } from 'vue'
-import { type GetPostOption } from '@/models/post/interface/index'
+import { type I_GetPostOption } from '@/models/post/interface/index'
 
 //声明接收list数据源
 withDefaults(
     defineProps<{
-        postList: PaginatedPostList //要渲染的列表
+        postList: I_PaginatedPostList //要渲染的列表
         listHeight?: number //list的高度
     }>(),
     {
@@ -50,7 +50,7 @@ withDefaults(
 
 //定义getPosts事件:对于不同的postList,有不同的getPosts方法
 const emit = defineEmits<{
-    getPosts: [option: GetPostOption]
+    getPosts: [option: I_GetPostOption]
 }>()
 //分页的逻辑
 //#region
@@ -62,7 +62,7 @@ const keyword = ref('')
 function handleSizeChange(newPageSize: number) {
     console.log(`修改为每页 ${newPageSize} 条`)
     pageSize.value = newPageSize
-    const option: GetPostOption = {
+    const option: I_GetPostOption = {
         currentPage: currentPage.value,
         pageSize: pageSize.value,
         keyword: keyword.value
@@ -72,7 +72,7 @@ function handleSizeChange(newPageSize: number) {
 //页码被用户改变时
 function handleCurrentChange(currentPage: number) {
     console.log(`当前页: ${currentPage}`)
-    const option: GetPostOption = {
+    const option: I_GetPostOption = {
         currentPage: currentPage,
         pageSize: pageSize.value,
         keyword: keyword.value
@@ -84,7 +84,7 @@ function handleCurrentChange(currentPage: number) {
 //#region
 //实时监听搜索框的值
 watch(keyword, async (newKeyword: string) => {
-    const option: GetPostOption = {
+    const option: I_GetPostOption = {
         currentPage: currentPage.value,
         pageSize: pageSize.value,
         keyword: newKeyword

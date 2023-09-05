@@ -44,14 +44,14 @@
 
 <script setup lang="ts">
 import { reactive, ref, nextTick, toRaw } from 'vue'
-import type { PublishPost } from '@/models/post/interface'
+import type { I_PublishPost } from '@/models/post/interface'
 import axios from 'axios'
 import { ElInput, ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router'
 //发布post的逻辑
 //#region
 //声明post对象
-const post: PublishPost = reactive({
+const post: I_PublishPost = reactive({
   title: '',
   content: '',
   comments: [],

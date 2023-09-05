@@ -68,7 +68,7 @@
 import PostCommentCardEdit from './Post-Comment-Card-Edit.vue';
 import { usePostStore } from '@/stores/post'
 import { ElMessage } from 'element-plus'
-import type { Comment } from '@/models/post/interface';
+import type { I_Comment } from '@/models/post/interface';
 
 //获取PostStore状态管理
 const PostStore = usePostStore()
@@ -113,7 +113,7 @@ function deleteOneComment(index: number) {
   PostStore.currentPost.comments.splice(index, 1)
 }
 //顶置评论
-function topComment(comment: Comment, currentIndex: number) {
+function topComment(comment: I_Comment, currentIndex: number) {
   PostStore.currentPost.comments.splice(currentIndex, 1)
   PostStore.currentPost.comments.unshift(comment)
   ElMessage.success({
