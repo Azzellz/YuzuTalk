@@ -17,6 +17,8 @@ interface PostState {
     latestPosts: LatestPosts
     //记录已经浏览过的post
     visitedPosts:VisitedPosts
+    //记录当前的post
+    currentPost: Post,
 }
 
 export const usePostStore = defineStore('post', {
@@ -27,7 +29,9 @@ export const usePostStore = defineStore('post', {
             //记录最新的post
             latestPosts: new LatestPosts(),
             //记录已经浏览过的post
-            visitedPosts: new VisitedPosts()
+            visitedPosts: new VisitedPosts(),
+            //记录当前浏览的post
+            currentPost: {} as Post
         }
     },
     actions: {
@@ -78,12 +82,12 @@ export const usePostStore = defineStore('post', {
         async getPosts(option?: GetPostOption) {
             await this.mainPosts.getPosts(option)
         },
-        //根据id获取post
-        async getPost(id: string): Promise<Post> {
+        //根据id获取post,同时也可以起到更新的作用
+        async getPost(id: string) {
             const {
                 data: { data }
             } = await axios.get(`/post?id=${id}`)
-            return data as Post
+            this.currentPost = data
         },
         //获取最新的十篇文章
         async getLatestPosts(limit?: number) {

@@ -3,15 +3,15 @@
     <el-input
       class="title"
       placeholder="修改标题"
-      v-model="StatusStore.currentPost.title"
+      v-model="PostStore.currentPost.title"
       style="width: 20%"
     ></el-input>
     <h6 class="info-box">
-      <el-avatar :size="40" :src="avatarURL(StatusStore.currentPost.user.avatar)"></el-avatar>
+      <el-avatar :size="40" :src="avatarURL(PostStore.currentPost.user.avatar)"></el-avatar>
       <div class="info-text">{{ postInfo }}</div>
       <div class="info-tags">
         <el-tag
-          v-for="(tag, index) in StatusStore.currentPost.tags"
+          v-for="(tag, index) in PostStore.currentPost.tags"
           :key="index"
           :disable-transitions="false"
           style="margin: 5px"
@@ -24,7 +24,7 @@
     <el-input
       class="content"
       type="textarea"
-      v-model="StatusStore.currentPost.content"
+      v-model="PostStore.currentPost.content"
       placeholder="修改内容"
       style="width: 75%"
       :autosize="{ minRows: 25 }"
@@ -41,7 +41,7 @@
       </template>
     </el-popover>
     <el-divider>评论区设置</el-divider>
-    <Post-Comment-Edit :post="StatusStore.currentPost"></Post-Comment-Edit>
+    <Post-Comment-Edit :post="PostStore.currentPost"></Post-Comment-Edit>
   </div>
 </template>
 
@@ -51,23 +51,23 @@ import PostCommentEdit from '../comment/Post-Comment-Edit.vue';
 import { computed } from 'vue'
 import { avatarURL } from '@/utils/index'
 import { usePostStore } from '@/stores/post'
-import { useStatusStore } from '@/stores/status';
 import { ElMessage } from 'element-plus'
-
-
+import { useStatusStore } from '@/stores/status';
+//引入状态管理
+const PostStore = usePostStore()
 const StatusStore = useStatusStore()
 //记录博客信息
 const postInfo = computed(() => {
-  return `${StatusStore.currentPost.user.user_name} 于 ${StatusStore.currentPost.format_time} 发布 | 👍:${StatusStore.currentPost.support} 👎:${StatusStore.currentPost.oppose} | 评论数:${StatusStore.currentPost.comments.length}`
+  return `${PostStore.currentPost.user.user_name} 于 ${PostStore.currentPost.format_time} 发布 | 👍:${PostStore.currentPost.support} 👎:${PostStore.currentPost.oppose} | 评论数:${PostStore.currentPost.comments.length}`
 })
-//引入状态管理
-const PostStore = usePostStore()
+
+
 //保存编辑
 async function saveEdited() {
   //保存并且结束编辑模式
   try {
     //等待更新完毕后再结束编辑模式
-    await PostStore.updatePost(StatusStore.currentPost)
+    await PostStore.updatePost(PostStore.currentPost)
     //结束编辑模式
     StatusStore.isEditing = false
     ElMessage.success({
