@@ -29,6 +29,8 @@
                     <div class="user-meta">
                         <p>发表了{{ UserStore.currentUser.publishedPosts.total }}篇帖子</p>
                         <p>收藏了{{ UserStore.currentUser.favoritesPosts.total }}篇帖子</p>
+                        <p>关注了{{ UserStore.currentUser.origin.follows.length }}人</p>
+                        <p>被{{ UserStore.currentUser.origin.fans.length }}人关注</p>
                     </div>
                 </div>
             </div>

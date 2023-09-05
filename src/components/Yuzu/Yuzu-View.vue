@@ -5,7 +5,7 @@
             <div v-if="tipTime" class="tip" v-text="tipContent"></div>
             <el-tabs
                 v-if="!PostStore.visitedPosts.isEmpty()"
-                v-model="StatusStore.currentPost._id"
+                v-model="selectKey"
                 type="card"
                 closable
                 @tab-click="goToVisitedPost"
@@ -58,9 +58,7 @@ onUnmounted(() => {
 //#region
 //获取仓库
 const PostStore = usePostStore()
-
 //获取初始指向:用当前浏览的id作为初始指向
-
 //初始化tip
 //#region
 const tipTime = ref<boolean>(false)
@@ -76,6 +74,14 @@ const showTip = (content: string, delay: number = 3000): void => {
 }
 
 //#endregion
+//动态selectKey
+//#region 
+const selectKey = computed(()=>{
+    //如果currentPost不存在_id属性,说明当前不在Item界面,所以将select设置为空
+    if (!StatusStore.currentPost._id) return ''
+    else return StatusStore.currentPost._id
+})
+//#endregion
 //选择post:跳转到目标路由
 async function goToVisitedPost(pane: TabsPaneContext) {
     const post_id: string = pane.paneName as string
@@ -83,7 +89,7 @@ async function goToVisitedPost(pane: TabsPaneContext) {
     //这里肯定存在,因为数据就是从那里来的
     const targetPost = PostStore.findVisitedPostById(post_id)!
     //跳转至目标
-    router.replace({
+    await router.replace({
         path: '/post/item',
         query: {
             id: targetPost._id,
@@ -112,7 +118,7 @@ function deleteVisitedPost(tabName: TabPaneName) {
 }
 //展示选中post的过滤内容
 const filterContent = computed(() => {
-    return StatusStore.currentPost.content.slice(0, 10) + '...'
+    return StatusStore.currentPost.content?.slice(0, 10) + '...'
 })
 const filterTitle = (title:string):string=>{
     return title.length>10?title.slice(0,10)+'...':title

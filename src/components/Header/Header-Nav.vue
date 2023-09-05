@@ -9,15 +9,26 @@
         text-color="#000"
         active-text-color="#ffd04b"
     >
-        <el-menu-item @click="openYuzu">
-            <el-avatar :size="40" src="/bear-walking.gif"></el-avatar>
-        </el-menu-item>
+        <div class="icon" @click="openYuzu">
+            <el-avatar :size="40" src="/yuzu.png"></el-avatar>
+        </div>
+        <div style="flex: 0.5"></div>
         <!-- Yuzu拟态框 -->
         <YuzuView></YuzuView>
 
-        <el-menu-item index="/home">仪表盘</el-menu-item>
+        <el-menu-item index="/home">
+            仪表盘
+            <el-icon>
+                <Compass />
+            </el-icon>
+        </el-menu-item>
 
-        <el-menu-item index="/post/list">帖子</el-menu-item>
+        <el-menu-item index="/post/list">
+            帖子
+            <el-icon>
+                <ChatLineSquare/>
+            </el-icon>            
+        </el-menu-item>
 
         <el-menu-item index="/user/info">
             <el-avatar :size="40" :src="avatarURL(userAvatar)"></el-avatar>
@@ -58,7 +69,14 @@ function openYuzu() {
     z-index: 10000;
     position: fixed;
     display: flex;
-    justify-content: center;
+    justify-content: start;
     font-weight: bold;
+    .icon{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin: 10px;
+        cursor: pointer;
+    }
 }
 </style>
