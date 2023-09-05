@@ -6,13 +6,56 @@ import type {
     I_VisitedPosts,
     I_PaginatedPostList,
     I_Post,
-    I_PostList
+    I_PostList,
+    I_Comment
 } from '../interface'
 import type { I_GetPostResponse } from '../interface/index'
-import type { I_User, I_OtherUser } from '@/models/user/interface'
+import type { I_User, I_OtherUser, I_MainUserInfo } from '@/models/user/interface'
 import { DefaultGetOption } from '../const'
 
 //!注意,这里是拿不到pinia实例的数据的!
+//Post类
+abstract class Abstract_Post implements I_Post {
+    constructor(
+        public _id: string,
+        public title: string,
+        public content: string,
+        public user: I_MainUserInfo,
+        public tags: Array<string>,
+        public comments: Array<I_Comment>,
+        public support: number,
+        public oppose: number,
+        public follow: number,
+        public isShowContent: boolean,
+        public isCommentable: boolean,
+        public isUnknown: boolean,
+        public index: number,
+        public format_time: string,
+        public time_stamp: number
+    ) {}
+}
+export class Post extends Abstract_Post {
+    constructor(post: I_Post = {} as I_Post) {
+        super(
+            post._id,
+            post.title,
+            post.content,
+            post.user,
+            post.tags,
+            post.comments,
+            post.support,
+            post.oppose,
+            post.follow,
+            post.isShowContent,
+            post.isCommentable,
+            post.isUnknown,
+            post.index,
+            post.format_time,
+            post.time_stamp
+        )
+    }
+
+}
 //MainPosts类
 export class MainPosts implements I_PaginatedPostList {
     readonly FROM: POST_FROM = POST_FROM.MAIN_POSTS
