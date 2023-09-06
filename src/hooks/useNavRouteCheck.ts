@@ -38,7 +38,7 @@ export function useHeaderNavRouteCheck() {
         activeIndex.value = '/post/list'
         break
       case 'user':
-        if (end === 'info' || end === 'follows' || end === 'published' || end === 'favorites') {
+        if (end === 'info' || end==='find') {
           activeIndex.value = '/user/info'
         } else {
           showCurrentIndex(to)
@@ -142,6 +142,9 @@ export function useUserAsideNavRouteCheck() {
         switch (to.path) {
             case '/user/info':
                 activeIndex.value = '/user/info'
+                break
+            case '/user/find':
+                activeIndex.value = '/user/find'
                 break
             default:
                 showCurrentIndex(to)

@@ -20,6 +20,12 @@
                     <span>资料</span>
                 </template>
             </el-menu-item>
+            <el-menu-item index="/user/find">
+                <template #title>
+                    <el-icon><User /></el-icon>
+                    <span>他人</span>
+                </template>
+            </el-menu-item>
         </el-menu>
     </div>
 </template>
