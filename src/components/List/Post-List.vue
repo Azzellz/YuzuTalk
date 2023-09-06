@@ -1,50 +1,44 @@
 <template>
     <div class="container">
-        <!-- 搜索功能 -->
-        <el-input placeholder="搜索" suffix-icon="Search" class="search" v-model="keyword">
-        </el-input>
+        <SearchBox @search="search"></SearchBox>
         <!-- 用组过渡每个post -->
         <!-- 列表展示 -->
         <el-scrollbar>
+            <!-- 这里的两个Props:currentPage和PageSize是list的 -->
             <PostCard
                 v-for="post in postList.list"
                 :key="post._id"
                 :post="post"
                 :FROM="postList.FROM"
-                :pageSize="pageSize"
-                :currentPage="currentPage"
+                :pageSize="postList.pageSize"
+                :currentPage="postList.currentPage"
             ></PostCard>
         </el-scrollbar>
         <!-- 分页的逻辑 -->
-        <div class="page-box">
-            <el-pagination
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-                v-model:current-page="currentPage"
-                :page-sizes="[5, 10, 20, 50, 100]"
-                :page-size="pageSize"
-                :total="postList.total"
-                layout="total,sizes, prev, pager, next"
-            >
-            </el-pagination>
-        </div>
+        <PaginationBox
+            :list="postList"
+            @handleCurrentChange="handleCurrentChange"
+            @handleSizeChange="handleSizeChange"
+        ></PaginationBox>
     </div>
 </template>
 
 <script setup lang="ts">
 import PostCard from '@/views/post/card/Post-Card.vue'
+import SearchBox from '@/components/Search/Search-Box.vue'
+import PaginationBox from '@/components/Pagination/Pagination-Box.vue'
 import type { I_PaginatedPostList } from '@/models/post/interface'
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
 import { type I_GetPostOption } from '@/models/post/interface/index'
 
 //声明接收list数据源
-withDefaults(
+const props = withDefaults(
     defineProps<{
-        postList: I_PaginatedPostList //要渲染的列表
+        postList: I_PaginatedPostList //要渲染的列表:实现了分页接口
         listHeight?: number //list的高度
     }>(),
     {
-        listHeight:650
+        listHeight: 650 //默认650px高度
     }
 )
 
@@ -54,27 +48,22 @@ const emit = defineEmits<{
 }>()
 //分页的逻辑
 //#region
-const pageSize = ref(10)
-const currentPage = ref(1)
-const keyword = ref('')
+const keyword = ref<string>('')
 
 //页面尺寸被改变时
-function handleSizeChange(newPageSize: number) {
-    console.log(`修改为每页 ${newPageSize} 条`)
-    pageSize.value = newPageSize
+function handleSizeChange(currentPage: number, newPageSize: number) {
     const option: I_GetPostOption = {
-        currentPage: currentPage.value,
-        pageSize: pageSize.value,
+        currentPage: currentPage,
+        pageSize: newPageSize,
         keyword: keyword.value
     }
     emit('getPosts', option)
 }
 //页码被用户改变时
-function handleCurrentChange(currentPage: number) {
-    console.log(`当前页: ${currentPage}`)
+function handleCurrentChange(currentPage: number, pageSize: number) {
     const option: I_GetPostOption = {
         currentPage: currentPage,
-        pageSize: pageSize.value,
+        pageSize: pageSize,
         keyword: keyword.value
     }
     emit('getPosts', option)
@@ -83,14 +72,16 @@ function handleCurrentChange(currentPage: number) {
 //搜索的逻辑
 //#region
 //实时监听搜索框的值
-watch(keyword, async (newKeyword: string) => {
+async function search(newKeyword: string) {
     const option: I_GetPostOption = {
-        currentPage: currentPage.value,
-        pageSize: pageSize.value,
+        currentPage: props.postList.currentPage,
+        pageSize: props.postList.pageSize,
         keyword: newKeyword
     }
+    //同步依赖
+    keyword.value = newKeyword
     emit('getPosts', option)
-})
+}
 //#endregion
 </script>
 
