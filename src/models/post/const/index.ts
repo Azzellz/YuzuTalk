@@ -1,5 +1,6 @@
-export const DefaultGetOption = {
-    currentPage: 1,
-    pageSize: 10,
-    keyword: ''
+import type { I_GetPostOption } from '../interface'
+
+export const DefaultGetOption: I_GetPostOption = {
+    keyword: '',
+    order: 'new'
 }

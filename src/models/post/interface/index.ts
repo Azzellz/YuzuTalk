@@ -51,7 +51,7 @@ export interface I_PostList {
     FROM: POST_FROM //post来源
 }
 //浏览过的post
-export interface I_VisitedPost extends I_Post, I_Pagination {
+export interface I_VisitedPost extends I_Post {
     FROM: POST_FROM //post来源
 }
 //浏览过的post列表
@@ -66,11 +66,14 @@ export interface I_Pagination {
 //可分页的列表
 export interface I_PaginatedPostList extends I_PostList, I_Pagination {}
 //搜索
-export interface I_Search {
+interface I_Search {
     keyword: string //搜索关键字
 }
-//获取post的参数:分页+搜索
-export interface I_GetPostOption extends I_Pagination, I_Search {}
+interface I_Sort {
+    order: 'new' | 'old' //新旧顺序
+}
+//!获取post的参数:排序+搜索
+export interface I_GetPostOption extends I_Search, I_Sort {}
 //后端返回的posts类型
 export interface I_GetPostResponse {
     data: {

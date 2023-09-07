@@ -76,11 +76,12 @@ const showTip = (content: string, delay: number = 3000): void => {
 //#endregion
 //动态selectKey
 //#region
-const selectKey = computed(() => {
+const selectKey = computed<string>(() => {
     //如果currentPost不存在_id属性,说明当前不在Item界面,所以将select设置为空
     if (!PostStore.currentPost._id) return ''
     else return PostStore.currentPost._id
 })
+
 //#endregion
 //选择post:跳转到目标路由
 async function goToVisitedPost(pane: TabsPaneContext) {
@@ -89,13 +90,11 @@ async function goToVisitedPost(pane: TabsPaneContext) {
     //这里肯定存在,因为数据就是从那里来的
     const targetPost = PostStore.findVisitedPostById(post_id)!
     //跳转至目标
-    await router.replace({
+    await router.push({
         path: '/post/item',
         query: {
             id: targetPost._id,
             FROM: targetPost.FROM,
-            currentPage: targetPost.currentPage,
-            pageSize: targetPost.pageSize
         }
     }) //跳转到文章详情页
     //关闭Yuzu

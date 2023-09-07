@@ -10,11 +10,20 @@
         active-text-color="#ffd04b"
     >
         <div class="icon" @click="openYuzu">
-            <el-avatar :size="40" src="/yuzu.png"></el-avatar>
+            <el-avatar :size="40" fit="fill" src="/yuzu.png"></el-avatar>
+        </div>
+        <div class="icon">
+            <!-- github仓库 -->
+            <a href="https://github.com/Azzellz/YuzuTalk">
+                <el-avatar :size="40" fit="fill" src="/github.jpg"></el-avatar>
+            </a>
         </div>
         <div style="flex: 0.5"></div>
-        <!-- Yuzu拟态框 -->
+        <!-- Yuzu模态框 -->
+        <!-- 这里不用Teleport是因为顶部会被Header遮住,所以直接在Header中展示就行 -->
+        <!-- <Teleport to="body"> -->
         <YuzuView></YuzuView>
+        <!-- </Teleport> -->
 
         <el-menu-item index="/home">
             仪表盘
@@ -26,8 +35,8 @@
         <el-menu-item index="/post/list">
             帖子
             <el-icon>
-                <ChatLineSquare/>
-            </el-icon>            
+                <ChatLineSquare />
+            </el-icon>
         </el-menu-item>
 
         <el-menu-item index="/user/info">
@@ -71,7 +80,7 @@ function openYuzu() {
     display: flex;
     justify-content: start;
     font-weight: bold;
-    .icon{
+    .icon {
         display: flex;
         flex-direction: column;
         justify-content: center;

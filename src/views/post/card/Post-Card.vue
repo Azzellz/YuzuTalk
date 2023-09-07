@@ -5,8 +5,6 @@
             query: {
                 id: post._id,
                 FROM: FROM,
-                currentPage: currentPage,
-                pageSize: pageSize
             }
         }"
     >
@@ -55,8 +53,6 @@ import type { I_Post } from '@/models/post/interface'
 const props = defineProps<{
     post: I_Post
     FROM: POST_FROM
-    currentPage?: number
-    pageSize?: number
 }>()
 //展示post相关信息的逻辑
 //#region

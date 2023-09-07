@@ -124,10 +124,10 @@ async function save() {
 //#endregion
 </script>
 
-<style scoped>
+<style lang="less" scoped>
 .container {
     display: flex;
-    padding: 50px;
+    padding: 30px;
     .left {
         margin: 10px;
         flex: 0.3;
@@ -141,8 +141,6 @@ async function save() {
         .user-info {
             display: flex;
             flex-direction: column;
-            .user-avatar {
-            }
             .user-item {
                 margin: 10px 0;
                 display: flex;

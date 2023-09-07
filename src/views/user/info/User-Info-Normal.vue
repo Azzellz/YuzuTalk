@@ -121,7 +121,7 @@ function goingEdit() {
 <style lang="less" scoped>
 .container {
     display: flex;
-    padding: 50px;
+    padding: 30px;
     .left {
         margin: 10px;
         flex: 0.3;
@@ -132,8 +132,6 @@ function goingEdit() {
         justify-content: space-between;
         align-items: center;
         .user-info {
-            .user-avatar {
-            }
             .user-item {
                 margin: 10px 0;
                 display: flex;

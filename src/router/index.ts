@@ -67,8 +67,6 @@ const router = createRouter({
                         return {
                             id: String($route.query.id),
                             FROM: Number($route.query.FROM),
-                            currentPage: Number($route.query.currentPage),
-                            pageSize: Number($route.query.pageSize)
                         }
                     }
                 }
@@ -90,12 +88,8 @@ const router = createRouter({
                     component: () => import('@/views/user/info/User-Info.vue')
                 },
                 {
-                    path: 'published',
-                    component: () => import('@/views/user/posts/User-Published.vue')
-                },
-                {
-                    path: 'favorites',
-                    component: () => import('@/views/user/posts/User-Favorites.vue')
+                    path:'find',
+                    component:()=>import('@/views/user/find/Find-Other.vue')
                 },
                 {
                     path: 'other',

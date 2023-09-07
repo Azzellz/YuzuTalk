@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
 import { useRoute, type RouteLocationNormalizedLoaded } from 'vue-router'
-import { MainPosts,  LatestPosts, VisitedPosts, Post} from '@/models/post/class'
+import { MainPosts, LatestPosts, VisitedPosts, Post } from '@/models/post/class'
 import type { I_GetPostOption, I_VisitedPost, I_Post } from '@/models/post/interface'
 import { POST_FROM } from '@/models/post/enum'
 import { useUserStore } from './user'
@@ -87,7 +87,7 @@ export const usePostStore = defineStore('post', {
             const {
                 data: { data }
             } = await axios.get(`/post?id=${id}`)
-            this.currentPost= new Post(data as I_Post)
+            this.currentPost = new Post(data as I_Post)
         },
         //获取最新的十篇文章
         async getLatestPosts(limit?: number) {
@@ -122,20 +122,14 @@ export const usePostStore = defineStore('post', {
             if (!route) route = useRoute()
             //根据路由参数分割出currentPage和pageSize和keyword
             const option: I_GetPostOption = {
-                currentPage: route.query.currentPage ? Number(route.query.currentPage) : 1,
-                pageSize: route.query.pageSize ? Number(route.query.pageSize) : 10,
-                keyword: route.query.keyword ? String(route.query.keyword) : ''
+                keyword: route.query.keyword ? String(route.query.keyword) : '',
+                order: 'new'
             }
             return option
         },
         //记录当前浏览的post
-        recordVisitedPost(
-            post: I_Post,
-            FROM: POST_FROM,
-            currentPage?: number,
-            pageSize?: number
-        ): void {
-            this.visitedPosts.recordPost(post, FROM, currentPage, pageSize)
+        recordVisitedPost(post: I_Post, FROM: POST_FROM): void {
+            this.visitedPosts.recordPost(post, FROM)
         },
         //根据id找到
         findVisitedPostById(post_id: string): I_VisitedPost | undefined {
