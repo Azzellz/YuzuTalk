@@ -14,7 +14,7 @@ import type { I_User, I_OtherUser, I_MainUserInfo } from '@/models/user/interfac
 import { DefaultGetOption } from '../const'
 
 //!注意,这里是拿不到pinia实例的数据的!
-//Post类
+//Post基类
 abstract class Abstract_Post implements I_Post {
     constructor(
         public _id: string,
@@ -54,32 +54,36 @@ export class Post extends Abstract_Post {
             post.time_stamp
         )
     }
-
 }
 //MainPosts类
 export class MainPosts implements I_PaginatedPostList {
     readonly FROM: POST_FROM = POST_FROM.MAIN_POSTS
     list: Array<I_Post> = []
     total: number = 0
-    currentPage: number = 0
+    currentPage: number = 1
     pageSize: number = 10
     constructor() {}
 
     async getPosts(option?: I_GetPostOption) {
         //检查是否有参数传入,没有就使用默认值
         if (!option) option = DefaultGetOption
-        this.currentPage = option.currentPage ? option.currentPage - 1 : 0 //currentPage=0的时候就是初始查询,不跳过
-        this.pageSize = option.pageSize || 10 //默认是一页展示10个post
+        // this.currentPage = option.currentPage ? option.currentPage - 1 : 0 //currentPage=0的时候就是初始查询,不跳过
+        // this.pageSize = option.pageSize || 10 //默认是一页展示10个post
+        const order = option.order ? option.order : 'new' //默认是新的在前
         const keyword = option.keyword || '' //默认搜索关键字为空
         //获取数据
         try {
             const {
                 data: { data }
-            } = (await axios.get(
-                `/posts?limit=${this.pageSize}&skip=${
-                    this.currentPage * this.pageSize
-                }&keyword=${keyword}`
-            )) as I_GetPostResponse
+            } = (await axios.get(`/posts`, {
+                params: {
+                    limit: this.pageSize,
+                    //currentPage要-1
+                    skip: (this.currentPage - 1) * this.pageSize,
+                    keyword,
+                    order
+                }
+            })) as I_GetPostResponse
 
             //todo 可优化成直接替换当前State
             this.total = data.total
@@ -107,7 +111,11 @@ export class LatestPosts implements I_PostList {
         try {
             const {
                 data: { data }
-            } = (await axios.get(`/posts/latest?limit=${limit}`)) as I_GetPostResponse
+            } = (await axios.get(`/posts/latest`, {
+                params: {
+                    limit
+                }
+            })) as I_GetPostResponse
             //更新list
             this.list = data.posts
             this.total = data.total
@@ -126,12 +134,10 @@ export class VisitedPosts implements I_VisitedPosts {
     list: Array<I_VisitedPost> = []
     constructor() {}
     //记录浏览过的post
-    recordPost(post: I_Post, FROM: POST_FROM, currentPage: number = 0, pageSize: number = 10) {
+    recordPost(post: I_Post, FROM: POST_FROM) {
         const visitedPost: I_VisitedPost = {
             ...post,
             FROM,
-            currentPage,
-            pageSize
         }
         this.list.push(visitedPost)
     }
@@ -155,7 +161,7 @@ export class PublishedPosts<U extends I_User | I_OtherUser> implements I_Paginat
     readonly FROM: POST_FROM
     list: Array<I_Post> = []
     total: number = 0
-    currentPage: number = 0
+    currentPage: number = 1
     pageSize: number = 10
     //保留当前用户的引用
     user: U = {} as U
@@ -166,18 +172,22 @@ export class PublishedPosts<U extends I_User | I_OtherUser> implements I_Paginat
     async getPosts(option?: I_GetPostOption) {
         //检查是否有参数传入,没有就使用默认值
         if (!option) option = DefaultGetOption
-        const currentPage = option.currentPage ? option.currentPage - 1 : 0 //currentPage=0的时候就是初始查询,不跳过
-        const pageSize = option.pageSize || 10 //默认是一页展示10个post
+        const order = option.order ? option.order : 'new' //默认是最新
         const keyword = option.keyword || '' //默认搜索关键字为空
         //获取数据
         try {
             const {
                 data: { data }
-            } = (await axios.get(
-                `/posts/published?user_id=${this.user._id}&limit=${pageSize}&skip=${
-                    currentPage * pageSize
-                }&keyword=${keyword}`
-            )) as I_GetPostResponse
+            } = (await axios.get(`/posts/published`, {
+                params: {
+                    user_id: this.user._id,
+                    limit: this.pageSize,
+                    //currentPage要-1
+                    skip: (this.currentPage - 1) * this.pageSize,
+                    keyword,
+                    order
+                }
+            })) as I_GetPostResponse
             //更新list
             this.list = data.posts
             this.total = data.total
@@ -195,7 +205,7 @@ export class FavoritesPosts<U extends I_User | I_OtherUser> implements I_Paginat
     readonly FROM: POST_FROM
     list: Array<I_Post> = []
     total: number = 0
-    currentPage: number = 0
+    currentPage: number = 1
     pageSize: number = 10
     //保留当前用户的引用
     user: U = {} as U
@@ -207,18 +217,22 @@ export class FavoritesPosts<U extends I_User | I_OtherUser> implements I_Paginat
     async getPosts(option?: I_GetPostOption) {
         //检查是否有参数传入,没有就使用默认值
         if (!option) option = DefaultGetOption
-        const currentPage = option.currentPage ? option.currentPage - 1 : 0 //currentPage=0的时候就是初始查询,不跳过
-        const pageSize = option.pageSize || 10 //默认是一页展示10个post
+        const order = option.order ? option.order : 'new' //默认是最新
         const keyword = option.keyword || '' //默认搜索关键字为空
         //获取数据
         try {
             const {
                 data: { data }
-            } = (await axios.get(
-                `/posts/favorites?user_id=${this.user._id}&limit=${pageSize}&skip=${
-                    currentPage * pageSize
-                }&keyword=${keyword}`
-            )) as I_GetPostResponse
+            } = (await axios.get(`/posts/favorites`, {
+                params: {
+                    user_id: this.user._id,
+                    limit: this.pageSize,
+                    //currentPage要-1
+                    skip: (this.currentPage - 1) * this.pageSize,
+                    keyword,
+                    order
+                }
+            })) as I_GetPostResponse
             //更新list
             this.list = data.posts
             this.total = data.total

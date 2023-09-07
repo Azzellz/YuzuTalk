@@ -6,7 +6,7 @@
         <el-pagination
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
-            v-model:current-page="currentPage"
+            v-model:current-page="list.currentPage"
             :page-sizes="[5, 10, 20, 50, 100]"
             :page-size="list.pageSize"
             :total="list.total"
@@ -17,32 +17,30 @@
 </template>
 
 <script setup lang="ts">
-import type { I_PaginatedPostList } from '@/models/post/interface';
-import { computed } from 'vue';
+import type { I_PaginatedPostList } from '@/models/post/interface'
 //定义emits
 const props = defineProps<{
     list: I_PaginatedPostList //要分页的列表:实现了分页接口
 }>()
 //定义事件触发
 const emit = defineEmits<{
-    handleSizeChange: [currentPage: number, newPageSize: number]
-    handleCurrentChange: [currentPage: number, pageSize: number]
+    handleSizeChange: []
+    handleCurrentChange: []
 }>()
 //定义分页逻辑
 //#region
-//这里是因为list中的currentPage从0开始,但是pagination需要从1开始的currentPage
-const currentPage = computed<number>(()=>{
-    return props.list.currentPage+1
-})
+//这两个方法要修改list的分页相关的数据,如currentPage,pageSize
 function handleSizeChange(newPageSize: number) {
     console.log(`修改为每页 ${newPageSize} 条`)
     // eslint-disable-next-line vue/no-mutating-props
     props.list.pageSize = newPageSize
-    emit('handleSizeChange', props.list.currentPage, newPageSize)
+    emit('handleSizeChange')
 }
 function handleCurrentChange(currentPage: number) {
     console.log(`当前页: ${currentPage}`)
-    emit('handleCurrentChange', currentPage, props.list.pageSize)
+    // eslint-disable-next-line vue/no-mutating-props
+    props.list.currentPage = currentPage
+    emit('handleCurrentChange')
 }
 //#endregion
 </script>

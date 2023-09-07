@@ -20,9 +20,6 @@ import { Post } from '@/models/post/class/index'
 const props = defineProps<{
     id: string
     FROM: POST_FROM
-    //这里接收分页参数是为了分页刷新
-    currentPage?: number
-    pageSize?: number
 }>()
 //获取状态管理对象
 const StatusStore = useStatusStore()
@@ -37,8 +34,6 @@ try {
         PostStore.recordVisitedPost(
             PostStore.currentPost,
             props.FROM,
-            props.currentPage,
-            props.pageSize
         )
     }
 } catch (error) {

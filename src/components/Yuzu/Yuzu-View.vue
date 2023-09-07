@@ -90,13 +90,11 @@ async function goToVisitedPost(pane: TabsPaneContext) {
     //这里肯定存在,因为数据就是从那里来的
     const targetPost = PostStore.findVisitedPostById(post_id)!
     //跳转至目标
-    await router.replace({
+    await router.push({
         path: '/post/item',
         query: {
             id: targetPost._id,
             FROM: targetPost.FROM,
-            currentPage: targetPost.currentPage,
-            pageSize: targetPost.pageSize
         }
     }) //跳转到文章详情页
     //关闭Yuzu

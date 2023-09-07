@@ -67,8 +67,6 @@ const router = createRouter({
                         return {
                             id: String($route.query.id),
                             FROM: Number($route.query.FROM),
-                            currentPage: Number($route.query.currentPage),
-                            pageSize: Number($route.query.pageSize)
                         }
                     }
                 }
