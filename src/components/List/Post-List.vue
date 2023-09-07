@@ -41,7 +41,7 @@ withDefaults(
         listHeight?: number //list的高度
     }>(),
     {
-        listHeight: 680 //默认680px高度
+        listHeight: 650 //默认680px高度
     }
 )
 //定义getPosts事件:对于不同的postList,有不同的getPosts方法
@@ -106,6 +106,11 @@ async function search(newKeyword: string) {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    .option-box{
+        width: 50%;
+        display: flex;
+        justify-content: center;
+    }
     .tip {
         color: gray;
     }

@@ -1,5 +1,5 @@
 <template>
-    <PostList :post-list="postList" @get-posts="getPosts" :list-height="380"></PostList>
+    <PostList :post-list="postList" @get-posts="getPosts" :list-height="350"></PostList>
 </template>
 
 <script setup lang="ts">

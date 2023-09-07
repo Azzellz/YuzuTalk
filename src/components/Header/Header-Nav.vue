@@ -14,7 +14,7 @@
         </div>
         <div class="icon">
             <!-- github仓库 -->
-            <a href="https://github.com/Azzellz/YuzuTalk">
+            <a href="https://github.com/Azzellz/YuzuTalk" target="_blank">
                 <el-avatar :size="40" fit="fill" src="/github.jpg"></el-avatar>
             </a>
         </div>
