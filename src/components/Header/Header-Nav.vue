@@ -19,8 +19,11 @@
             </a>
         </div>
         <div style="flex: 0.5"></div>
-        <!-- Yuzu拟态框 -->
+        <!-- Yuzu模态框 -->
+        <!-- 这里不用Teleport是因为顶部会被Header遮住,所以直接在Header中展示就行 -->
+        <!-- <Teleport to="body"> -->
         <YuzuView></YuzuView>
+        <!-- </Teleport> -->
 
         <el-menu-item index="/home">
             仪表盘

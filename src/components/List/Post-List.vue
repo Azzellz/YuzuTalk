@@ -1,6 +1,7 @@
 <template>
     <div class="container">
-        <SearchBox @search="search"></SearchBox>
+        <!-- 搜索框 -->
+        <SearchBox @search="search" search-type="immediate" placeholder="搜..."></SearchBox>
         <!-- 用组过渡每个post -->
         <!-- 列表展示 -->
         <el-scrollbar>
@@ -91,14 +92,5 @@ async function search(newKeyword: string) {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-
-    .page-box {
-        margin: 20px;
-    }
-    .search {
-        width: 50%;
-        margin: 20px;
-        height: 40px;
-    }
 }
 </style>

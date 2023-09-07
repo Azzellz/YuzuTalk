@@ -76,11 +76,12 @@ const showTip = (content: string, delay: number = 3000): void => {
 //#endregion
 //动态selectKey
 //#region
-const selectKey = computed(() => {
+const selectKey = computed<string>(() => {
     //如果currentPost不存在_id属性,说明当前不在Item界面,所以将select设置为空
     if (!PostStore.currentPost._id) return ''
     else return PostStore.currentPost._id
 })
+
 //#endregion
 //选择post:跳转到目标路由
 async function goToVisitedPost(pane: TabsPaneContext) {

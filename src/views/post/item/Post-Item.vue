@@ -12,7 +12,7 @@ import { ElMessage } from 'element-plus'
 import { onBeforeUnmount, watch } from 'vue'
 import { type POST_FROM } from '@/models/post/enum'
 import { usePostStore } from '@/stores/post'
-import { Post } from '@/models/post/class/index';
+import { Post } from '@/models/post/class/index'
 
 //定义要接收的Props
 //这里只需要接收id即可
@@ -51,9 +51,12 @@ try {
     router.push('/post/list')
 }
 //如果当前路由参数发生变化,则重新获取post
+//这里是为了处理Yuzu导航栏在Item页跳转另一个item的时候更新状态
 const route = useRoute()
 watch(route, async (newRoute: RouteLocationNormalized) => {
     //路由改变时重新获取post
+    //如果不是item跳转那么就不进行之后的操作
+    if (newRoute.path !== '/post/item') return
     await PostStore.getPost(newRoute.query.id as string)
     //关闭编辑状态
     StatusStore.isEditing = false
