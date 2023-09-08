@@ -1,9 +1,9 @@
 <template>
     <div class="container">
         <el-menu
-            background-color="#545c64"
+            background-color="#FFC0CB"
             text-color="#fff"
-            active-text-color="#ffd04b"
+            active-text-color="#60656C"
             style="border: none"
             router
             :default-active="activeIndex"
@@ -40,7 +40,7 @@ const { currentIndex, activeIndex } = useUserAsideNavRouteCheck()
     width: 100px;
     height: 100%;
     margin-top: 60px;
-    background-color: #545c64;
+    background-color: #ffc0cb;
     font-weight: bold;
     overflow-y: auto;
     position: fixed;
