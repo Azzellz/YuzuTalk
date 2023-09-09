@@ -18,7 +18,14 @@
             ref="editor"
             @keydown.enter.prevent="pushParagraph"
         >
-            <p v-for="p in paragraphs" :key="p.id" v-html="p.content"></p>
+            <p v-for="p in paragraphs" :key="p.id" :id="p.id">
+                <span
+                    v-for="span in p.spans"
+                    :key="span.id"
+                    :id="span.id"
+                    v-html="span.content"
+                ></span>
+            </p>
         </div>
     </div>
 </template>
@@ -30,66 +37,50 @@ import { reactive, ref } from 'vue'
 //模块化内容
 //#region
 //初始化段落队列
-const paragraphs = reactive<
-    Array<{
-        id: string
-        content: string
-    }>
->([
-    {
-        id: nanoid(),
-        content: '请输入'
+class Paragraph {
+    id: string
+    spans: Array<Span>
+    constructor() {
+        this.id = nanoid()
+        //每一个paragraph默认带一个具有换行标签的span
+        this.spans = [new Span('<br>')]
     }
-])
+}
+//Span标签内容的联合类型
+type SpanContentType = 'text'
+class Span {
+    id: string
+    type: SpanContentType
+    content: string
+    constructor(content: string, type: SpanContentType = 'text') {
+        this.id = nanoid()
+        this.type = type
+        this.content = content
+    }
+}
+//生成响应式段落list
+const paragraphs = reactive<Array<Paragraph>>([new Paragraph()])
 //绑定换行添加p段落
 //获取模板引用
 const editor = ref<HTMLDivElement | null>(null)
 //键盘回车事件
 const pushParagraph = (event: Event) => {
     if ((event as KeyboardEvent).key === 'Enter') {
-        paragraphs.push({
-            id: nanoid(),
-            content: '<br>'
-        })
+        paragraphs.push(new Paragraph())
+        //让光标换行
+        //TODO: 内容没有换行
+        const selection = window.getSelection()
+        const selectionRange = selection?.getRangeAt(0)
+        console.log(selectionRange, selection)
+        if (editor.value && selection) {
+            const range = document.createRange()
+            range.selectNodeContents(editor.value)
+            range.collapse(false)
+            selection.removeAllRanges()
+            selection.addRange(range)
+        }
     }
 }
-//#endregion
-
-//光标相关
-//#region
-// function getCaretLineNumber(editor:HTMLDivElement) {
-//     const { selectionStart } = editor.SEL
-//     const textBeforeCaret = inputElement.value.slice(0, selectionStart)
-//     const lineNumber = textBeforeCaret.split('\n').length
-//     return lineNumber
-// }
-//#endregion
-
-//绑定输入更新事件
-//采用解构化处理
-//#region
-// const content = ref('')
-// const updateContent = (event: Event) => {
-//     content.value = (event.target as HTMLDivElement).innerHTML
-//     console.log(content.value)
-// }
-//#endregion
-
-// 监听重新渲染时的钩子:用来恢复光标位置
-//#region
-
-//在下一次dom更新时调用的钩子
-// onUpdated(() => {
-//     // 恢复光标位置
-//     const selection = window.getSelection()
-//     if (editor.value && selection) {
-//         const range = document.createRange()
-//         range.selectNodeContents(editor.value)
-//         range.collapse(false)
-//         selection.removeAllRanges()
-//         selection.addRange(range)
-//     }
-// })
 //#endregion
 
 //tool-bar相关功能
