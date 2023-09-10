@@ -18,11 +18,12 @@
             ref="editor"
             @keydown.enter.prevent="pushParagraph"
         >
-            <p v-for="p in paragraphs" :key="p.id" :id="p.id">
+            <p v-for="(p, index) in paragraphs" :key="p.id" :id="p.id" :index="index">
                 <span
                     v-for="span in p.spans"
                     :key="span.id"
                     :id="span.id"
+                    :ownerParagraphId="p.id"
                     v-html="span.content"
                 ></span>
             </p>
@@ -39,11 +40,13 @@ import { reactive, ref } from 'vue'
 //初始化段落队列
 class Paragraph {
     id: string
+    // index: number //行数索引
     spans: Array<Span>
-    constructor() {
+    constructor(firstSpanContent: string = '<br>') {
         this.id = nanoid()
+        // this.index = paragraphs.length
         //每一个paragraph默认带一个具有换行标签的span
-        this.spans = [new Span('<br>')]
+        this.spans = [new Span(firstSpanContent, this.id)]
     }
 }
 //Span标签内容的联合类型
@@ -52,10 +55,12 @@ class Span {
     id: string
     type: SpanContentType
     content: string
-    constructor(content: string, type: SpanContentType = 'text') {
+    ownerParagraphId: string
+    constructor(content: string, ownerParagraphId: string, type: SpanContentType = 'text') {
         this.id = nanoid()
         this.type = type
         this.content = content
+        this.ownerParagraphId = ownerParagraphId
     }
 }
 //生成响应式段落list
@@ -66,12 +71,28 @@ const editor = ref<HTMLDivElement | null>(null)
 //键盘回车事件
 const pushParagraph = (event: Event) => {
     if ((event as KeyboardEvent).key === 'Enter') {
-        paragraphs.push(new Paragraph())
+        // paragraphs.push(new Paragraph())
         //让光标换行
         //TODO: 内容没有换行
         const selection = window.getSelection()
         const selectionRange = selection?.getRangeAt(0)
-        console.log(selectionRange, selection)
+        //获取当前行的id
+        const currentSpan = selectionRange?.commonAncestorContainer as any
+        const currentParagraphId = currentSpan.parentElement.attributes['ownerParagraphId'].value
+        //从Paragraphs中找到对应的paragraph
+        const currentParagraph = paragraphs.find((p: Paragraph) => {
+            return p.id === currentParagraphId
+        })
+        //换行切割长度
+        const sliceLength = selectionRange?.startOffset! - 1
+        const wholeText = currentSpan.wholeText as string
+        const sliceText = wholeText.slice(0, sliceLength)
+        //添加paragraph
+        sliceText ? paragraphs.push(new Paragraph(sliceText)) : paragraphs.push(new Paragraph())
+        // paragraphs.push(new Paragraph())
+        console.log('Range对象', selectionRange)
+        console.log(sliceLength, sliceText)
+
         if (editor.value && selection) {
             const range = document.createRange()
             range.selectNodeContents(editor.value)

@@ -1,10 +1,7 @@
 import './assets/css/main.css'
-
 import { createApp } from 'vue'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
-//代码高亮的样式
-import 'prismjs/themes/prism.css'
 
 import App from './App.vue'
 import router from './router'
@@ -17,8 +14,6 @@ app.use(pinia)
 app.use(ElementPlus)
 app.use(router)
 app.use(plugin)
-import { highlight } from './directives'
-app.directive('highlight', highlight)
 
 //注册Element-Icon
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'

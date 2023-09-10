@@ -26,14 +26,8 @@
                 >+标签</el-button
             >
         </div>
-        <el-input
-            type="textarea"
-            :autosize="{ minRows: 25 }"
-            v-model="post.content"
-            placeholder="请输入内容"
-            style="width: 75%"
-        ></el-input>
-        <GreatEditor></GreatEditor>
+        <!-- 编辑器 -->
+        <YuzuEditor :post="post"/>
         <div class="publish-box">
             <el-button type="primary" @click="publish" style="margin: 10px 20px">发布</el-button>
             <el-checkbox v-model="post.isShowContent" style="margin: 10px 20px"
@@ -48,12 +42,14 @@
 </template>
 
 <script setup lang="ts">
+import YuzuEditor from '@/components/Editor/Yuzu-Editor.vue'
 import { reactive, ref, nextTick, toRaw } from 'vue'
 import type { I_PublishPost } from '@/models/post/interface'
 import axios from 'axios'
 import { ElInput, ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router'
-import GreatEditor from '@/components/Editor/Great-Editor.vue'
+
+
 //发布post的逻辑
 //#region
 //声明post对象
