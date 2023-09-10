@@ -1,7 +1,7 @@
 import type { I_OtherUser, I_User } from '../interface'
 import { PublishedPosts, FavoritesPosts } from '../../post/class/index'
 import axios from 'axios'
-import { POST_FROM } from '@/models/post/enum'
+import { POST_FROM } from '../../post/enum/index'
 
 abstract class Abstract_User<U extends I_User | I_OtherUser | Array<I_OtherUser>> {
     public origin: U
@@ -9,7 +9,7 @@ abstract class Abstract_User<U extends I_User | I_OtherUser | Array<I_OtherUser>
         this.origin = u
     }
     //获取的抽象方法
-    abstract getUser(): Promise<void>
+    abstract getUser(id?:string): Promise<void>
 }
 
 //当前用户信息
@@ -59,7 +59,25 @@ export class OtherUser extends Abstract_User<I_OtherUser> {
         //初始化
         super({} as I_OtherUser)
     }
-    async getUser(): Promise<void> {}
+    async getUser(id:string): Promise<void> {
+        const {
+            data: { data }
+        } = await axios.get(`/user?id=${id}&isOther=true`)
+        console.log('updated other-user-info:', data)
+        this.origin = data.user
+        //初始化publishedPosts和favoritesPosts
+        //更新user指向
+        this.publishedPosts.user = this.origin
+        this.favoritesPosts.user = this.origin
+        //获取当前用户的发布文章
+        if (this.publishedPosts.isEmpty()) {
+            await this.publishedPosts.getPosts()
+        }
+        //获取当前用户的收藏文章
+        if (this.favoritesPosts.isEmpty()) {
+            await this.favoritesPosts.getPosts()
+        }
+    }
 }
 
 //最近注册的所有用户信息

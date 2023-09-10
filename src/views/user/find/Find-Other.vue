@@ -17,10 +17,10 @@
 </template>
 
 <script setup lang="ts">
-import UserCard from '../card/User-Card.vue'
+import UserCard from '@/components/Card/User-Card.vue'
 import SearchBox from '@/components/Search/Search-Box.vue'
 import { ref } from 'vue'
-import { type I_MainUserInfo } from '@/models/user/interface/index'
+import { type I_MainUserInfo } from '@/models/modules/user/interface/index'
 import axios from 'axios'
 
 //搜索功能的逻辑实现

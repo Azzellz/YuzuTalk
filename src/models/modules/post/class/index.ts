@@ -10,7 +10,7 @@ import type {
     I_Comment
 } from '../interface'
 import type { I_GetPostResponse } from '../interface/index'
-import type { I_User, I_OtherUser, I_MainUserInfo } from '@/models/user/interface'
+import type { I_User, I_OtherUser, I_MainUserInfo } from '../../user/interface'
 import { DefaultGetOption } from '../const'
 
 //!注意,这里是拿不到pinia实例的数据的!

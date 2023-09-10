@@ -1,11 +1,11 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
 import { useRoute, type RouteLocationNormalizedLoaded } from 'vue-router'
-import { MainPosts, LatestPosts, VisitedPosts, Post } from '@/models/post/class'
-import type { I_GetPostOption, I_VisitedPost, I_Post } from '@/models/post/interface'
-import { POST_FROM } from '@/models/post/enum'
+import { MainPosts, LatestPosts, VisitedPosts, Post } from '@/models/modules/post/class'
+import type { I_GetPostOption, I_VisitedPost, I_Post } from '@/models/modules/post/interface'
+import { POST_FROM } from '@/models/modules/post/enum'
 import { useUserStore } from './user'
-import pinia from '.'
+import pinia from '../index'
 //!这里要传入同个pinia实例
 const UserStore = useUserStore(pinia)
 

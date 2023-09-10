@@ -44,9 +44,9 @@ import YuzuEditor from '@/components/Editor/Yuzu-Editor.vue'
 
 import { computed } from 'vue'
 import { avatarURL } from '@/utils/index'
-import { usePostStore } from '@/stores/post'
+import { usePostStore } from '@/stores/modules/post'
 import { ElMessage } from 'element-plus'
-import { useStatusStore } from '@/stores/status'
+import { useStatusStore } from '@/stores/modules/status'
 
 //引入状态管理
 const PostStore = usePostStore()

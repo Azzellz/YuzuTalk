@@ -39,7 +39,7 @@
 
 <script setup lang="ts">
 import UserAvatarRoute from '@/components/User/User-Avatar-Route.vue'
-import type { I_Comment } from '@/models/post/interface'
+import type { I_Comment } from '@/models/modules/post/interface'
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
 //定义Props

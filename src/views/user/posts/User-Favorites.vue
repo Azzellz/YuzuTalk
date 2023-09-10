@@ -4,9 +4,9 @@
 
 <script setup lang="ts">
 import PostList from '@/components/List/Post-List.vue'
-import { useUserStore } from '@/stores/user'
-import { usePostStore } from '@/stores/post'
-import type { I_GetPostOption } from '@/models/post/interface/index'
+import { useUserStore } from '@/stores/modules/user'
+import { usePostStore } from '@/stores/modules/post'
+import type { I_GetPostOption } from '@/models/modules/post/interface/index'
 //获取仓库
 const PostStore = usePostStore()
 const UserStore = useUserStore()

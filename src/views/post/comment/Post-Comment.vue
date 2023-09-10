@@ -76,12 +76,12 @@
 </template>
 
 <script setup lang="ts">
-import PostCommentCard from './Post-Comment-Card.vue'
+import PostCommentCard from '@/components/Card/Post-Comment-Card.vue'
 import axios from 'axios'
 import { computed, ref } from 'vue'
 import { ElMessage } from 'element-plus'
-import { useStatusStore } from '@/stores/status'
-import { usePostStore } from '@/stores/post'
+import { useStatusStore } from '@/stores/modules/status'
+import { usePostStore } from '@/stores/modules/post'
 
 //封装公共逻辑
 //#region

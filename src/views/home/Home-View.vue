@@ -51,10 +51,10 @@
 
 <script setup lang="ts">
 import UserAvatarRoute from '@/components/User/User-Avatar-Route.vue'
-import PostCard from '../post/card/Post-Card.vue'
-import { usePostStore } from '@/stores/post'
-import { useUserStore } from '@/stores/user'
-import { POST_FROM } from '@/models/post/enum'
+import PostCard from '@/components/Card/Post-Card.vue'
+import { usePostStore } from '@/stores/modules/post'
+import { useUserStore } from '@/stores/modules/user'
+import { POST_FROM } from '@/models/modules/post/enum'
 
 //初始化数据
 //#region

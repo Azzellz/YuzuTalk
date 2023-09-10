@@ -24,7 +24,7 @@
 </template>
 
 <script setup lang="ts">
-import { type I_MainUserInfo } from '@/models/user/interface/index'
+import { type I_MainUserInfo } from '@/models/modules/user/interface/index'
 import { avatarURL } from '@/utils/index'
 //配置默认Props
 withDefaults(

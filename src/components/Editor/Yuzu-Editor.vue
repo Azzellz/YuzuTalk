@@ -20,9 +20,10 @@ import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import hljs from 'highlight.js' //导入代码高亮文件
 import 'highlight.js/styles/monokai-sublime.css' //导入代码高亮样式
-import type { I_PublishPost } from '@/models/post/interface/index'
+import type { I_PublishPost,I_Post } from '@/models/modules/post/interface/index'
+
 defineProps<{
-    post: I_PublishPost
+    post: I_PublishPost | I_Post
 }>()
 //编辑器逻辑
 //#region

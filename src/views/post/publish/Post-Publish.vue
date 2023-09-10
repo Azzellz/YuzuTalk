@@ -44,7 +44,7 @@
 <script setup lang="ts">
 import YuzuEditor from '@/components/Editor/Yuzu-Editor.vue'
 import { reactive, ref, nextTick, toRaw } from 'vue'
-import type { I_PublishPost } from '@/models/post/interface'
+import type { I_PublishPost } from '@/models/modules/post/interface'
 import axios from 'axios'
 import { ElInput, ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router'

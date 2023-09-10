@@ -2,7 +2,7 @@
     <div class="register-box">
         <el-upload
             class="avatar-uploader"
-            :action="`${serverIpAddress}/register`"
+            :action="`${ServerIpAddress}/register`"
             ref="uploadRef"
             :data="{
                 user_name,
@@ -54,7 +54,7 @@
 
 <script setup lang="ts">
 import { useRegister } from '@/hooks/useRegister'
-import { serverIpAddress } from '../../utils/index';
+import { ServerIpAddress } from '@/api/index';
 //暴露钩子提供的变量
 const {
     user_name,

@@ -27,12 +27,12 @@
 </template>
 
 <script setup lang="ts">
-import PostCard from '@/views/post/card/Post-Card.vue'
+import PostCard from '@/components/Card/Post-Card.vue'
 import SearchBox from '@/components/Search/Search-Box.vue'
 import PaginationBox from '@/components/Pagination/Pagination-Box.vue'
-import type { I_PaginatedPostList } from '@/models/post/interface'
+import type { I_PaginatedPostList } from '@/models/modules/post/interface'
 import { computed, ref, watch } from 'vue'
-import { type I_GetPostOption } from '@/models/post/interface/index'
+import { type I_GetPostOption } from '@/models/modules/post/interface/index'
 
 //声明接收list数据源
 withDefaults(

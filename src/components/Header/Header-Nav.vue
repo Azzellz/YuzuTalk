@@ -54,8 +54,8 @@ import YuzuView from '../Yuzu/Yuzu-View.vue'
 
 import { useHeaderNavRouteCheck } from '@/hooks/useNavRouteCheck'
 import { avatarURL } from '@/utils/index'
-import { useUserStore } from '@/stores/user'
-import { useStatusStore } from '@/stores/status'
+import { useUserStore } from '@/stores/modules/user'
+import { useStatusStore } from '@/stores/modules/status'
 
 //顶部Nav路由检查
 const { currentIndex, currentIndexContent, activeIndex } = useHeaderNavRouteCheck()

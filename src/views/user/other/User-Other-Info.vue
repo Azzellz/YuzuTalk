@@ -40,10 +40,10 @@
 </template>
 
 <script setup lang="ts">
-import PostCard from '@/views/post/card/Post-Card.vue'
+import PostCard from '@/components/Card/Post-Card.vue'
 
-import { useUserStore } from '@/stores/user'
-import { avatarURL } from '../../../utils/index'
+import { useUserStore } from '@/stores/modules/user'
+import { avatarURL } from '@/utils/index'
 import axios from 'axios'
 import { ref } from 'vue'
 import { ElMessage } from 'element-plus'

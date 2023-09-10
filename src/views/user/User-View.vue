@@ -4,7 +4,7 @@
 </template>
 
 <script setup lang="ts">
-import { useUserStore } from '@/stores/user'
+import { useUserStore } from '@/stores/modules/user'
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 //根据路由动态展示css类

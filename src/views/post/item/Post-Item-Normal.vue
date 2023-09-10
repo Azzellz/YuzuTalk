@@ -37,19 +37,18 @@
             </div>
         </h6>
         <el-divider>内容</el-divider>
-        <div class="content-box ql-container ql-snow" ref="contentBoxRef">
-            <div class="ql-editor" v-html="PostStore.currentPost.content"></div>
-        </div>
+        <PostContent />
         <el-divider>评论</el-divider>
-        <PostComment></PostComment>
+        <PostComment />
     </div>
 </template>
 
 <script setup lang="ts">
 import PostComment from '../comment/Post-Comment.vue'
+import PostContent from '@/components/Content/Post-Content.vue'
 import { avatarURL } from '@/utils/index'
 import { computed } from 'vue'
-import { usePostStore } from '@/stores/post'
+import { usePostStore } from '@/stores/modules/post'
 const PostStore = usePostStore()
 //获取当前帖子,获取响应式的引用
 //非匿名帖子的信息
@@ -72,7 +71,6 @@ const unknownPostInfo = computed(() => {
     white-space: pre-line;
     width: 80%;
     min-height: 600px;
-    overflow-y: auto;
 }
 .info-box {
     color: grey;

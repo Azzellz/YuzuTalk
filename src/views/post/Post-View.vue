@@ -5,7 +5,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-import {  usePostStore } from '@/stores/post'
+import {  usePostStore } from '@/stores/modules/post'
 //根据路由动态展示css类
 //#region
 const route = useRoute()
