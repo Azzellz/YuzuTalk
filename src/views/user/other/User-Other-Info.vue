@@ -13,40 +13,37 @@
             <el-button v-else style="margin: 10px auto" type="danger" @click="unFollow"
                 >取消关注</el-button
             >
-            <h1 style="margin: 10px auto">{{ UserStore.otherUser.origin.user_name }}</h1>
+            <h1 style="margin: 10px auto">用户名:{{ UserStore.otherUser.origin.user_name }}</h1>
             <h2 style="margin: 10px auto; color: #ccc; font-weight: 500">
-                {{ UserStore.otherUser.origin.account }}
+                账号:{{ UserStore.otherUser.origin.account }}
             </h2>
-            <div style="margin: 10px auto">
+            <h6 style="margin: 10px auto; color: #ccc">
                 帖子数:{{ UserStore.otherUser.publishedPosts.total }} 被关注数:{{
                     UserStore.otherUser.origin.fans.length
                 }}
-            </div>
+            </h6>
         </div>
         <div class="right">
             <!-- 右侧用来展示帖子 -->
             <h1 style="margin: 20px">作品</h1>
-            <!-- 这里没做分页,可能会有性能问题 -->
-            <div style="padding: 20px; height: 600px; overflow: auto">
-                <PostCard
-                    v-for="post in UserStore.otherUser.publishedPosts.list"
-                    :key="post._id"
-                    :post="post"
-                    :FROM="UserStore.otherUser.publishedPosts.FROM"
-                ></PostCard>
-            </div>
+            <PostList
+                :postList="UserStore.otherUser.publishedPosts"
+                :listHeight="450"
+                @getPosts="getPosts"
+            />
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import PostCard from '@/components/Card/Post-Card.vue'
-
+import PostList from '@/components/List/Post-List.vue'
 import { useUserStore } from '@/stores/modules/user'
 import { avatarURL } from '@/utils/index'
 import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import { UserAPI } from '@/api/modules/user'
+import type { I_GetPostOption } from '@/models/modules/post/interface'
+import { usePostStore } from '@/stores/modules/post'
 
 //初始化
 //#region
@@ -64,6 +61,13 @@ try {
     await UserStore.getOtherUserPublishedPosts()
 } catch (error) {
     console.log(error)
+}
+//#endregion
+//分页逻辑函数组装
+//#region
+const PostStore = usePostStore()
+async function getPosts(option: I_GetPostOption) {
+    await PostStore.getOtherUserPublishedPosts(option)
 }
 //#endregion
 //判断是否已经关注
@@ -86,7 +90,6 @@ async function checkIsFollowed() {
 }
 await checkIsFollowed()
 //#endregion
-
 //关注与取关的逻辑
 //#region
 //关注

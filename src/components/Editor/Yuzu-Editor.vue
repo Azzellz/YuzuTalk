@@ -1,16 +1,16 @@
 <!-- eslint-disable vue/no-mutating-props -->
 <!-- 这里就是要修改Props的 -->
 <template>
-    <div class="editor-container">
+    <div class="base-editor-container" :style="customEditor">
         <QuillEditor
             ref="QuillEditorRef"
             content-type="html"
             :options="options"
             v-model:content="post.content"
         />
-        <div class="html-displayer">
-            <div class="title">html展示</div>
-            <div class="content" v-text="post.content"></div>
+        <div v-if="isShowHTML" class="html-displayer">
+            <h5 class="title">html展示</h5>
+            <div class="html-content" v-text="post.content"></div>
         </div>
     </div>
 </template>
@@ -20,11 +20,26 @@ import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import hljs from 'highlight.js' //导入代码高亮文件
 import 'highlight.js/styles/monokai-sublime.css' //导入代码高亮样式
-import type { I_PublishPost,I_Post } from '@/models/modules/post/interface/index'
+import type { I_PublishPost, I_Post } from '@/models/modules/post/interface/index'
 
-defineProps<{
-    post: I_PublishPost | I_Post
-}>()
+const props = withDefaults(
+    defineProps<{
+        post: I_PublishPost | I_Post
+        height?: number
+        isShowHTML?: boolean
+    }>(),
+    {
+        height: 500,
+        isShowHTML:false
+    }
+)
+//自定义样式
+//#region
+const customEditor = {
+    height: props.height + 'px'
+}
+//#endregion
+
 //编辑器逻辑
 //#region
 //配置高亮
@@ -63,13 +78,19 @@ const options = {
 
 <style lang="less" scoped>
 @width: 75%;
-.editor-container {
+
+.base-editor-container {
     width: @width;
-    height: 400px;
     overflow-y: auto;
     .html-displayer {
         width: @width;
-        height: 500px;
+        margin-top: 10px;
+        .title {
+            color: gray;
+        }
+        .html-content {
+            color: gray;
+        }
     }
 }
 </style>
