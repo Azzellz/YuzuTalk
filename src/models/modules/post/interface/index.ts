@@ -1,4 +1,4 @@
-import type { I_MainUserInfo } from '@/models/user/interface'
+import type { I_MainUserInfo } from '../../user/interface'
 import type { POST_FROM } from '../enum'
 
 //Post

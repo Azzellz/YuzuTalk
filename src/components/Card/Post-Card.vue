@@ -4,14 +4,14 @@
             path: '/post/item',
             query: {
                 id: post._id,
-                FROM: FROM,
+                FROM: FROM
             }
         }"
     >
         <el-card class="post-card">
             <div class="user-info">
                 <template v-if="!post.isUnknown">
-                    <el-avatar :size="50" :src="avatarURL(post.user.avatar)"></el-avatar>
+                    <UserAvatarRoute :user="post.user" />
                     <div style="flex: 1">
                         {{ postInfo }}
                     </div>
@@ -44,8 +44,9 @@
 </template>
 
 <script setup lang="ts">
+import UserAvatarRoute from '@/components/User/User-Avatar-Route.vue'
 import { computed } from 'vue'
-import { getBetterFormatTime, avatarURL } from '@/utils/index'
+import { getBetterFormatTime } from '@/utils/index'
 import type { POST_FROM } from '@/models/modules/post/enum'
 import type { I_Post } from '@/models/modules/post/interface'
 

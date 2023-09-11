@@ -3,12 +3,10 @@
         <div class="recent-posts">
             <h1 style="text-align: center">最新</h1>
             <el-scrollbar>
-                <PostCard
-                    v-for="post in PostStore.latestPosts.list"
-                    :key="post._id"
-                    :post="post"
-                    :FROM="POST_FROM.LATEST_POSTS"
-                />
+                <!-- 这里做个判断看看是否是已经注销的用户的post -->
+                <template v-for="post in PostStore.latestPosts.list" :key="post._id">
+                    <PostCard v-if="post.user" :post="post" :FROM="POST_FROM.LATEST_POSTS" />
+                </template>
             </el-scrollbar>
         </div>
         <div class="recent-users">

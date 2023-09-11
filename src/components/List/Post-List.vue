@@ -9,12 +9,9 @@
         <!-- 列表展示 -->
         <h5 v-if="postList.list.length === 0" class="tip">没找到哦...</h5>
         <el-scrollbar :height="listHeight">
-            <PostCard
-                v-for="post in postList.list"
-                :key="post._id"
-                :post="post"
-                :FROM="postList.FROM"
-            />
+            <template v-for="post in postList.list" :key="post._id">
+                <PostCard v-if="post.user" :post="post" :FROM="postList.FROM" />
+            </template>
         </el-scrollbar>
         <!-- 分页的逻辑 -->
         <PaginationBox
@@ -42,7 +39,7 @@ withDefaults(
     }>(),
     {
         listHeight: 650, //默认680px高度
-        isOptionable: true  //默认开启选项
+        isOptionable: true //默认开启选项
     }
 )
 //定义getPosts事件:对于不同的postList,有不同的getPosts方法
