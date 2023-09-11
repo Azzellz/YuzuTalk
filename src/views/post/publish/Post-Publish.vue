@@ -45,9 +45,9 @@
 import YuzuEditor from '@/components/Editor/Yuzu-Editor.vue'
 import { reactive, ref, nextTick, toRaw } from 'vue'
 import type { I_PublishPost } from '@/models/modules/post/interface'
-import axios from 'axios'
 import { ElInput, ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router'
+import { PostAPI } from '@/api/modules/post';
 
 
 //发布post的逻辑
@@ -82,7 +82,7 @@ async function publish() {
     try {
         const {
             data: { data }
-        } = await axios.post('/post', {
+        } = await PostAPI.post('/', {
             post: toRaw(post), //这里要返回普通对象
             user_id: localStorage.getItem('user_id') //发送当前用户id
         })

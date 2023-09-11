@@ -2,7 +2,7 @@
     <div class="register-box">
         <el-upload
             class="avatar-uploader"
-            :action="`${ServerIpAddress}/register`"
+            :action="registerUrl"
             ref="uploadRef"
             :data="{
                 user_name,
@@ -54,7 +54,7 @@
 
 <script setup lang="ts">
 import { useRegister } from '@/hooks/useRegister'
-import { ServerIpAddress } from '@/api/index';
+import { UserAPI } from '@/api/modules/user'
 //暴露钩子提供的变量
 const {
     user_name,
@@ -68,7 +68,11 @@ const {
     handleAvatarSuccess,
     register
 } = useRegister()
-
+//获取注册URL
+const config = {
+    url: '/register'
+}
+const registerUrl = UserAPI.getUri(config)
 </script>
 
 <style lang="less" scoped>

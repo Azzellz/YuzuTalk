@@ -44,9 +44,9 @@ import PostCard from '@/components/Card/Post-Card.vue'
 
 import { useUserStore } from '@/stores/modules/user'
 import { avatarURL } from '@/utils/index'
-import axios from 'axios'
 import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
+import { UserAPI } from '@/api/modules/user'
 
 //初始化
 //#region
@@ -73,9 +73,12 @@ async function checkIsFollowed() {
     try {
         const {
             data: { data }
-        } = await axios.get(
-            `/user/isFollow?user_id=${localStorage.getItem('user_id')}&follow_id=${id}`
-        )
+        } = await UserAPI.get(`/isFollow`, {
+            params: {
+                user_id: localStorage.getItem('user_id'),
+                follow_id: id
+            }
+        })
         isFollowed.value = data
     } catch (error) {
         console.log(error)
@@ -89,7 +92,7 @@ await checkIsFollowed()
 //关注
 async function follow() {
     try {
-        await axios.put('/user/follow', {
+        await UserAPI.put('/follow', {
             user_id: localStorage.getItem('user_id'),
             follow_id: id
         })
@@ -110,7 +113,7 @@ async function follow() {
 //取关
 async function unFollow() {
     try {
-        await axios.put('/user/unFollow', {
+        await UserAPI.put('/unFollow', {
             user_id: localStorage.getItem('user_id'),
             follow_id: id
         })

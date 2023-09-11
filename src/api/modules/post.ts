@@ -1,8 +1,14 @@
 import axios from "axios";
-import { ServerIpAddress } from "..";
+import { ServerIpAddress, TimeOut } from "..";
 
+//对单个post的api
 export const PostAPI = axios.create({
     baseURL: `${ServerIpAddress}/api/post`,
-    timeout: 10000,
+    timeout: TimeOut,
+})
+//对posts的api
+export const PostsAPI = axios.create({
+    baseURL: `${ServerIpAddress}/api/posts`,
+    timeout: TimeOut
 })
 

@@ -77,11 +77,12 @@
 
 <script setup lang="ts">
 import PostCommentCard from '@/components/Card/Post-Comment-Card.vue'
-import axios from 'axios'
 import { computed, ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import { useStatusStore } from '@/stores/modules/status'
 import { usePostStore } from '@/stores/modules/post'
+import { UserAPI } from '@/api/modules/user'
+import { PostAPI } from '@/api/modules/post'
 
 //封装公共逻辑
 //#region
@@ -102,9 +103,11 @@ const isFavorite = ref(false)
 try {
     const {
         data: { data }
-    } = await axios.post('/user/isfavorite', {
-        user_id: localStorage.getItem('user_id'),
-        post_id: PostStore.currentPost._id
+    } = await UserAPI.get('/isfavorite', {
+        params: {
+            user_id: localStorage.getItem('user_id'),
+            post_id: PostStore.currentPost._id
+        }
     })
     isFavorite.value = data
 } catch (error) {
@@ -134,9 +137,10 @@ async function publishComment() {
     //TODO: 这里可以做个评论区校验,防止用户恶意评论
     try {
         //这里不需要接收返回值,因为在评论区会重新获取评论列表
+
         const {
             data: { data }
-        } = await axios.post('/comment', comment)
+        } = await PostAPI.post('/comment', comment)
         //更新当前post引用
         PostStore.currentPost.comments.push(data)
         //提示
@@ -186,15 +190,13 @@ function goingToEditMode() {
 async function supportPost() {
     //给帖子点赞
     try {
-        await axios.post('/support/post', {
+        await PostAPI.put('/support', {
             post_id: PostStore.currentPost._id
         })
         ElMessage.success({
             message: '点赞成功',
             offset: 80
         })
-        //调用动态更新
-        // await dynamicUpdate()
         //直接展示变化
         PostStore.currentPost.support++
     } catch (error) {
@@ -209,15 +211,13 @@ async function supportPost() {
 async function opposePost() {
     //给帖子点踩
     try {
-        await axios.post('/oppose/post', {
+        await PostAPI.put('/oppose', {
             post_id: PostStore.currentPost._id
         })
         ElMessage.success({
             message: '点踩成功',
             offset: 80
         })
-        //调用动态更新
-        // await dynamicUpdate()
         //直接展示变化
         PostStore.currentPost.oppose++
     } catch (error) {
@@ -232,7 +232,7 @@ async function opposePost() {
 async function favoritePost() {
     //收藏帖子
     try {
-        await axios.post('/favorite/post', {
+        await PostAPI.put('/favorite', {
             post_id: PostStore.currentPost._id,
             user_id: localStorage.getItem('user_id')
         })
@@ -254,7 +254,7 @@ async function favoritePost() {
 async function unfavoritePost() {
     //取消收藏帖子
     try {
-        await axios.post('/unfavorite/post', {
+        await PostAPI.put('/unfavorite', {
             post_id: PostStore.currentPost._id,
             user_id: localStorage.getItem('user_id')
         })

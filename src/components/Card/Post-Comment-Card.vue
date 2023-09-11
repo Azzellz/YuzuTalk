@@ -24,9 +24,9 @@
 </template>
 
 <script setup lang="ts">
+import { PostAPI } from '@/api/modules/post';
 import UserAvatarRoute from '@/components/User/User-Avatar-Route.vue'
 import type { I_Comment } from '@/models/modules/post/interface'
-import axios from 'axios'
 import { ElMessage } from 'element-plus'
 //定义Props
 defineProps<{
@@ -41,7 +41,7 @@ async function supportComment(comment: I_Comment) {
     const post_id = comment.post._id
     //给评论点赞
     try {
-        await axios.put('/post/comment/support', {
+        await PostAPI.put('/comment/support', {
             comment_id,
             post_id
         })
@@ -66,7 +66,7 @@ async function opposeComment(comment: I_Comment) {
     const post_id = comment.post._id
     //给评论点踩
     try {
-        await axios.put('/post/comment/support', {
+        await PostAPI.put('/comment/support', {
             comment_id,
             post_id
         })

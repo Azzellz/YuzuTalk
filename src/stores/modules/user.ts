@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
-import axios from 'axios'
 import { RecentUsers, CurrentUser, OtherUser } from '@/models/modules/user/class'
 import type { I_User } from '@/models/modules/user/interface'
+import { UserAPI } from '@/api/modules/user';
 
 interface UserState {
     currentUser: CurrentUser
@@ -39,7 +39,7 @@ export const useUserStore = defineStore('user', {
         },
         //更新用户信息
         async updateUser(newUser: I_User) {
-            await axios.put('/user', newUser)
+            await UserAPI.put('/', newUser)
         }
     }
 })

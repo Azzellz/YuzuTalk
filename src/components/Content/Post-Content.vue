@@ -14,5 +14,6 @@ const PostStore = usePostStore()
     white-space: pre-line;
     width: 80%;
     min-height: 600px;
+    height: auto
 }
 </style>

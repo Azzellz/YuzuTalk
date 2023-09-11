@@ -1,7 +1,7 @@
 import type { I_OtherUser, I_User } from '../interface'
 import { PublishedPosts, FavoritesPosts } from '../../post/class/index'
-import axios from 'axios'
 import { POST_FROM } from '../../post/enum/index'
+import { UserAPI } from '@/api/modules/user'
 
 abstract class Abstract_User<U extends I_User | I_OtherUser | Array<I_OtherUser>> {
     public origin: U
@@ -28,7 +28,11 @@ export class CurrentUser extends Abstract_User<I_User> {
     async getUser(): Promise<void> {
         const {
             data: { data }
-        } = await axios.get(`/user?id=${localStorage.getItem('user_id')}`)
+        } = await UserAPI.get('/', {
+            params: {
+                id: localStorage.getItem('user_id')
+            }
+        })
         console.log('updated user-info:', data)
         //这里只更新了origin字段,还有两个字段是在其他地方更新的
         this.origin = data.user
@@ -62,7 +66,12 @@ export class OtherUser extends Abstract_User<I_OtherUser> {
     async getUser(id:string): Promise<void> {
         const {
             data: { data }
-        } = await axios.get(`/user?id=${id}&isOther=true`)
+        } = await UserAPI.get('/',{
+            params:{
+                id,
+                isOther:true
+            }
+        })
         console.log('updated other-user-info:', data)
         this.origin = data.user
         //初始化publishedPosts和favoritesPosts
@@ -90,7 +99,7 @@ export class RecentUsers extends Abstract_User<Array<I_OtherUser>> {
     async getUser(): Promise<void> {
         const {
             data: { data }
-        } = await axios.get(`/user/recent`)
+        } = await UserAPI.get('/recent')
         console.log('recentUsers: ', data)
         this.origin = data
     }
