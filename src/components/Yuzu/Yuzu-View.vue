@@ -94,7 +94,7 @@ async function goToVisitedPost(pane: TabsPaneContext) {
         path: '/post/item',
         query: {
             id: targetPost._id,
-            FROM: targetPost.FROM,
+            FROM: targetPost.FROM
         }
     }) //跳转到文章详情页
     //关闭Yuzu

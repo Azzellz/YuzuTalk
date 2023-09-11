@@ -67,11 +67,6 @@ const unknownPostInfo = computed(() => {
     flex-direction: column;
     align-items: center;
 }
-.content-box {
-    white-space: pre-line;
-    width: 80%;
-    min-height: 600px;
-}
 .info-box {
     color: grey;
     display: flex;

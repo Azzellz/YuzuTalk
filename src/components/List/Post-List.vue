@@ -9,6 +9,7 @@
         <!-- 列表展示 -->
         <h5 v-if="postList.list.length === 0" class="tip">没找到哦...</h5>
         <el-scrollbar :height="listHeight">
+            <!-- 处理注销用户的情况 -->
             <template v-for="post in postList.list" :key="post._id">
                 <PostCard v-if="post.user" :post="post" :FROM="postList.FROM" />
             </template>
