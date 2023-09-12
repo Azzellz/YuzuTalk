@@ -1,0 +1,10 @@
+.with-aside-header {
+    margin-top: 60px;
+    margin-left: 100px;
+}
+.without-aside {
+    margin-top: 60px;
+}
+.without-header {
+    margin-left: 100px;
+}
