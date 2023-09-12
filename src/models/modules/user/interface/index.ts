@@ -1,4 +1,4 @@
-import type { I_Post } from '@/models/post/interface'
+import type { I_Post } from '../../post/interface'
 
 //完整的用户信息
 export interface I_User {

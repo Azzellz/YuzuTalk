@@ -17,7 +17,7 @@
 </template>
 
 <script setup lang="ts">
-import type { I_PaginatedPostList } from '@/models/post/interface'
+import type { I_PaginatedPostList } from '@/models/modules/post/interface'
 //定义emits
 const props = defineProps<{
     list: I_PaginatedPostList //要分页的列表:实现了分页接口

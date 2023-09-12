@@ -6,13 +6,13 @@
 <script setup lang="ts">
 import PostItemNormal from './Post-Item-Normal.vue'
 import PostItemEdit from './Post-Item-Edit.vue'
-import { useStatusStore } from '@/stores/status'
+import { useStatusStore } from '@/stores/modules/status'
 import { useRouter, useRoute, type RouteLocationNormalized } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { onBeforeUnmount, watch } from 'vue'
-import { type POST_FROM } from '@/models/post/enum'
-import { usePostStore } from '@/stores/post'
-import { Post } from '@/models/post/class/index'
+import { type POST_FROM } from '@/models/modules/post/enum'
+import { usePostStore } from '@/stores/modules/post'
+import { Post } from '@/models/modules/post/class/index'
 
 //定义要接收的Props
 //这里只需要接收id即可

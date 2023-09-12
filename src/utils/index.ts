@@ -1,6 +1,6 @@
 import { computed, type ComputedRef } from 'vue'
+import { ServerIpAddress } from '@/api/index';
 
-export const serverIpAddress = 'http://localhost:4000'
 
 //获取更好的时间格式,formatTime格式必须为YYYY-MM-DD
 export function getBetterFormatTime(formatTime: string): ComputedRef<string> {
@@ -17,7 +17,7 @@ export function getBetterFormatTime(formatTime: string): ComputedRef<string> {
 }
 //获取服务器图片地址
 export function avatarURL(avatar: string): string {
-    return `${serverIpAddress}/user_avatar/${avatar}`
+    return `${ServerIpAddress}/user_avatar/${avatar}`
 }
 
 //防抖函数

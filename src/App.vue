@@ -3,6 +3,7 @@ import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import HeaderNav from './components/Header/Header-Nav.vue'
 import LoadingView from './components/Loading/Loading-View.vue'
+import CursorView from './components/Cursor/Cursor-View.vue'
 
 //获取当前路由
 const currentRoute = useRoute()
@@ -20,8 +21,9 @@ const isShowAside = computed(() => {
 
 <template>
     <!-- 顶部导航栏 -->
-    <HeaderNav v-if="isShowHeader"></HeaderNav>
-
+    <HeaderNav v-if="isShowHeader" />
+    <!-- 全局鼠标特效 -->
+    <CursorView />
     <router-view v-if="isShowAside" name="aside"></router-view>
     <!-- 内容展示 -->
     <!-- 需要套层异步Suspense -->

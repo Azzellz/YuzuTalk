@@ -1,7 +1,7 @@
-import axios from 'axios'
-import {  ref } from 'vue'
+import { ref } from 'vue'
 import router from '@/router'
 import { ElMessage } from 'element-plus'
+import { UserAPI } from '@/api/modules/user'
 
 export function useLogin() {
     //初始化数据
@@ -9,11 +9,10 @@ export function useLogin() {
     const password = ref('')
     //登录的逻辑
     function login() {
-        axios
-            .post('/login', {
-                account: account.value,
-                password: password.value
-            })
+        UserAPI.post('/login', {
+            account: account.value,
+            password: password.value
+        })
             .then(({ data: { data } }) => {
                 console.log(data)
                 localStorage.setItem('token', data.token)

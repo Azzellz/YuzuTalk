@@ -1,6 +1,4 @@
 import { defineStore } from 'pinia'
-// import { usePostStore } from './post'
-// import pinia from '.'
 //!这里要传入同个pinia实例
 // const PostStore = usePostStore(pinia)
 //记录全局性的状态状态

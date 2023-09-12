@@ -1,5 +1,5 @@
+import { UserAPI } from '@/api/modules/user'
 import router from '@/router'
-import axios from 'axios'
 import { ElMessage } from 'element-plus'
 import { type RouteLocationNormalized } from 'vue-router'
 
@@ -24,7 +24,7 @@ export function useLoginCheck() {
         if (localStorage.getItem('token')) {
             //Token校验
             try {
-                await axios.post(
+                await UserAPI.post(
                     '/login',
                     {
                         user_id: localStorage.getItem('user_id')

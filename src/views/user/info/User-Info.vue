@@ -6,7 +6,7 @@
 <script setup lang="ts">
 import UserInfoEdit from "./User-Info-Edit.vue";
 import UserInfoNormal from "./User-Info-Normal.vue";
-import { useStatusStore } from '@/stores/status';
+import { useStatusStore } from '@/stores/modules/status';
 import { onBeforeUnmount } from "vue";
 
 //获取状态管理
