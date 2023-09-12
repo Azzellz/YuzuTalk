@@ -3,12 +3,10 @@
         <div class="recent-posts">
             <h1 style="text-align: center">最新</h1>
             <el-scrollbar>
-                <PostCard
-                    v-for="post in PostStore.latestPosts.list"
-                    :key="post._id"
-                    :post="post"
-                    :FROM="POST_FROM.LATEST_POSTS"
-                />
+                <!-- 这里做个判断看看是否是已经注销的用户的post -->
+                <template v-for="post in PostStore.latestPosts.list" :key="post._id">
+                    <PostCard v-if="post.user" :post="post" :FROM="POST_FROM.LATEST_POSTS" />
+                </template>
             </el-scrollbar>
         </div>
         <div class="recent-users">
@@ -51,10 +49,10 @@
 
 <script setup lang="ts">
 import UserAvatarRoute from '@/components/User/User-Avatar-Route.vue'
-import { usePostStore } from '@/stores/post'
-import PostCard from '../post/card/Post-Card.vue'
-import { useUserStore } from '@/stores/user'
-import { POST_FROM } from '@/models/post/enum'
+import PostCard from '@/components/Card/Post-Card.vue'
+import { usePostStore } from '@/stores/modules/post'
+import { useUserStore } from '@/stores/modules/user'
+import { POST_FROM } from '@/models/modules/post/enum'
 
 //初始化数据
 //#region

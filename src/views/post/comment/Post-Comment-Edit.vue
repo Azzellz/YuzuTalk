@@ -65,10 +65,10 @@
 </template>
 
 <script setup lang="ts">
-import PostCommentCardEdit from './Post-Comment-Card-Edit.vue';
-import { usePostStore } from '@/stores/post'
+import PostCommentCardEdit from '@/components/Card/Post-Comment-Card-Edit.vue';
+import { usePostStore } from '@/stores/modules/post'
 import { ElMessage } from 'element-plus'
-import type { I_Comment } from '@/models/post/interface';
+import type { I_Comment } from '@/models/modules/post/interface';
 
 //获取PostStore状态管理
 const PostStore = usePostStore()

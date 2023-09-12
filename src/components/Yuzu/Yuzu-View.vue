@@ -27,12 +27,12 @@
 </template>
 
 <script setup lang="ts">
-import { useStatusStore } from '@/stores/status'
+import { useStatusStore } from '@/stores/modules/status'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
-import { usePostStore } from '@/stores/post'
+import { usePostStore } from '@/stores/modules/post'
 import { type TabPaneName, type TabsPaneContext } from 'element-plus'
 import router from '@/router/index'
-import { type I_VisitedPost } from '@/models/post/interface/index'
+import { type I_VisitedPost } from '@/models/modules/post/interface/index'
 
 //获取状态管理仓库
 const StatusStore = useStatusStore()
@@ -94,7 +94,7 @@ async function goToVisitedPost(pane: TabsPaneContext) {
         path: '/post/item',
         query: {
             id: targetPost._id,
-            FROM: targetPost.FROM,
+            FROM: targetPost.FROM
         }
     }) //跳转到文章详情页
     //关闭Yuzu

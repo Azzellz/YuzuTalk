@@ -1,4 +1,3 @@
-import axios from 'axios'
 import { POST_FROM } from '../enum'
 import type {
     I_GetPostOption,
@@ -10,8 +9,9 @@ import type {
     I_Comment
 } from '../interface'
 import type { I_GetPostResponse } from '../interface/index'
-import type { I_User, I_OtherUser, I_MainUserInfo } from '@/models/user/interface'
+import type { I_User, I_OtherUser, I_MainUserInfo } from '../../user/interface'
 import { DefaultGetOption } from '../const'
+import { PostsAPI } from '@/api/modules/post'
 
 //!注意,这里是拿不到pinia实例的数据的!
 //Post基类
@@ -75,7 +75,7 @@ export class MainPosts implements I_PaginatedPostList {
         try {
             const {
                 data: { data }
-            } = (await axios.get(`/posts`, {
+            } = (await PostsAPI.get('/', {
                 params: {
                     limit: this.pageSize,
                     //currentPage要-1
@@ -111,7 +111,7 @@ export class LatestPosts implements I_PostList {
         try {
             const {
                 data: { data }
-            } = (await axios.get(`/posts/latest`, {
+            } = (await PostsAPI.get('/latest', {
                 params: {
                     limit
                 }
@@ -178,7 +178,7 @@ export class PublishedPosts<U extends I_User | I_OtherUser> implements I_Paginat
         try {
             const {
                 data: { data }
-            } = (await axios.get(`/posts/published`, {
+            } = (await PostsAPI.get('/published', {
                 params: {
                     user_id: this.user._id,
                     limit: this.pageSize,
@@ -223,7 +223,7 @@ export class FavoritesPosts<U extends I_User | I_OtherUser> implements I_Paginat
         try {
             const {
                 data: { data }
-            } = (await axios.get(`/posts/favorites`, {
+            } = (await PostsAPI.get('/favorites', {
                 params: {
                     user_id: this.user._id,
                     limit: this.pageSize,

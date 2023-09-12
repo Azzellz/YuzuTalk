@@ -1,12 +1,12 @@
 <template>
-    <PostList :post-list="postList" @get-posts="getPosts" :list-height="380"></PostList>
+    <PostList :post-list="postList" @get-posts="getPosts" :list-height="350"></PostList>
 </template>
 
 <script setup lang="ts">
 import PostList from '@/components/List/Post-List.vue'
-import { usePostStore } from '@/stores/post'
-import { type I_GetPostOption } from '../../../models/post/interface/index'
-import { useUserStore } from '@/stores/user'
+import { usePostStore } from '@/stores/modules/post'
+import { type I_GetPostOption } from '@/models/modules/post/interface/index'
+import { useUserStore } from '@/stores/modules/user'
 //获取仓库
 const PostStore = usePostStore()
 const UserStore = useUserStore()

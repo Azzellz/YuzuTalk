@@ -51,14 +51,14 @@
 </template>
 
 <script setup lang="ts">
-import UserCard from '../card/User-Card.vue'
+import UserCard from '@/components/Card/User-Card.vue'
 import UserFavorites from '../posts/User-Favorites.vue'
 import UserPublished from '../posts/User-Published.vue'
 
 import { ref, toRaw } from 'vue'
-import { useUserStore } from '@/stores/user'
+import { useUserStore } from '@/stores/modules/user'
 import { avatarURL } from '@/utils/index'
-import { useStatusStore } from '../../../stores/status'
+import { useStatusStore } from '@/stores/modules/status'
 import { ElMessage } from 'element-plus'
 
 //编辑用户信息相关的逻辑

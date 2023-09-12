@@ -50,17 +50,17 @@
 </template>
 
 <script setup lang="ts">
-import UserCard from '../card/User-Card.vue'
+import UserCard from '@/components/Card/User-Card.vue'
 import UserFavorites from '../posts/User-Favorites.vue'
 import UserPublished from '../posts/User-Published.vue'
 
 import { avatarURL } from '@/utils/index'
-import { useUserStore } from '@/stores/user'
-import { useStatusStore } from '@/stores/status'
+import { useUserStore } from '@/stores/modules/user'
+import { useStatusStore } from '@/stores/modules/status'
 import { ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router'
-import axios from 'axios'
 import { ref } from 'vue'
+import { UserAPI } from '@/api/modules/user';
 
 //初始化
 //#region
@@ -90,9 +90,12 @@ async function deregistration() {
     try {
         const {
             data: { data }
-        } = await axios.delete(`/user?id=${localStorage.getItem('user_id')}`, {
+        } = await UserAPI.delete('/', {
             headers: {
                 Authorization: localStorage.getItem('token')
+            },
+            params:{
+                id:localStorage.getItem('user_id')
             }
         })
         localStorage.clear() //清空本地存储

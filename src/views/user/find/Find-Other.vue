@@ -17,11 +17,11 @@
 </template>
 
 <script setup lang="ts">
-import UserCard from '../card/User-Card.vue'
+import UserCard from '@/components/Card/User-Card.vue'
 import SearchBox from '@/components/Search/Search-Box.vue'
 import { ref } from 'vue'
-import { type I_MainUserInfo } from '@/models/user/interface/index'
-import axios from 'axios'
+import { type I_MainUserInfo } from '@/models/modules/user/interface/index'
+import { UsersAPI } from '@/api/modules/user'
 
 //搜索功能的逻辑实现
 //#region
@@ -33,7 +33,12 @@ async function searchUser(newKeyword: string) {
     try {
         const {
             data: { data }
-        } = await axios.get(`/users?userNameKeyword=${newKeyword}`)
+        } = await UsersAPI.get('/', {
+            params: {
+                userNameKeyword: newKeyword
+            }
+        })
+        console.log(data)
         userList.value = data as Array<I_MainUserInfo>
     } catch (error) {
         console.log(error)

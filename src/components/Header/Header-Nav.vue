@@ -14,7 +14,7 @@
         </div>
         <div class="icon">
             <!-- github仓库 -->
-            <a href="https://github.com/Azzellz/YuzuTalk">
+            <a href="https://github.com/Azzellz/YuzuTalk" target="_blank">
                 <el-avatar :size="40" fit="fill" src="/github.jpg"></el-avatar>
             </a>
         </div>
@@ -22,7 +22,7 @@
         <!-- Yuzu模态框 -->
         <!-- 这里不用Teleport是因为顶部会被Header遮住,所以直接在Header中展示就行 -->
         <!-- <Teleport to="body"> -->
-        <YuzuView></YuzuView>
+        <YuzuView />
         <!-- </Teleport> -->
 
         <el-menu-item index="/home">
@@ -54,8 +54,8 @@ import YuzuView from '../Yuzu/Yuzu-View.vue'
 
 import { useHeaderNavRouteCheck } from '@/hooks/useNavRouteCheck'
 import { avatarURL } from '@/utils/index'
-import { useUserStore } from '@/stores/user'
-import { useStatusStore } from '@/stores/status'
+import { useUserStore } from '@/stores/modules/user'
+import { useStatusStore } from '@/stores/modules/status'
 
 //顶部Nav路由检查
 const { currentIndex, currentIndexContent, activeIndex } = useHeaderNavRouteCheck()

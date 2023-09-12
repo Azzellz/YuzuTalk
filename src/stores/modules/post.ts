@@ -1,11 +1,11 @@
 import { defineStore } from 'pinia'
-import axios from 'axios'
 import { useRoute, type RouteLocationNormalizedLoaded } from 'vue-router'
-import { MainPosts, LatestPosts, VisitedPosts, Post } from '@/models/post/class'
-import type { I_GetPostOption, I_VisitedPost, I_Post } from '@/models/post/interface'
-import { POST_FROM } from '@/models/post/enum'
+import { MainPosts, LatestPosts, VisitedPosts, Post } from '@/models/modules/post/class'
+import type { I_GetPostOption, I_VisitedPost, I_Post } from '@/models/modules/post/interface'
+import { POST_FROM } from '@/models/modules/post/enum'
 import { useUserStore } from './user'
-import pinia from '.'
+import pinia from '../index'
+import { PostAPI } from '@/api/modules/post'
 //!这里要传入同个pinia实例
 const UserStore = useUserStore(pinia)
 
@@ -86,7 +86,11 @@ export const usePostStore = defineStore('post', {
         async getPost(id: string) {
             const {
                 data: { data }
-            } = await axios.get(`/post?id=${id}`)
+            } = await PostAPI.get('/', {
+                params: {
+                    id
+                }
+            })
             this.currentPost = new Post(data as I_Post)
         },
         //获取最新的十篇文章
@@ -111,11 +115,15 @@ export const usePostStore = defineStore('post', {
         },
         //直接将整个post对象传入,替换数据库内具有相同id的post
         async updatePost(new_post: I_Post) {
-            await axios.put(`/post`, new_post)
+            await PostAPI.put('/', new_post)
         },
         //删除post
         async deletePost(post_id: string) {
-            await axios.delete(`/post?post_id=${post_id}`)
+            await PostAPI.delete('/',{
+                params:{
+                    post_id
+                }
+            })
         },
         //获取getOption
         getOption(route?: RouteLocationNormalizedLoaded): I_GetPostOption {
