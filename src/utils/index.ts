@@ -17,7 +17,7 @@ export function getBetterFormatTime(formatTime: string): ComputedRef<string> {
 }
 //获取服务器图片地址
 export function avatarURL(avatar: string): string {
-    return `${ServerIpAddress}/user_avatar/${avatar}`
+    return `${ServerIpAddress}/user/avatar/${avatar}`
 }
 
 //防抖函数
