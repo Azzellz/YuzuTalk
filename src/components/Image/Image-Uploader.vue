@@ -1,24 +1,31 @@
 <template>
-    <div>
-        <vueCropper
-            ref="cropper"
-            :img="option.img"
-            :outputSize="option.outputSize"
-            :outputType="option.outputType"
-        ></vueCropper>
-    </div>
+    <!-- <div class="container"> -->
+    <vueCropper
+        ref="cropper"
+        :img="option.img"
+        :outputSize="option.outputSize"
+        :outputType="option.outputType"
+        :autoCrop="true"
+        :full="true"
+    ></vueCropper>
+    <!-- </div> -->
 </template>
 
 <script setup lang="ts">
 import 'vue-cropper/dist/index.css'
 import { VueCropper } from 'vue-cropper'
-import { reactive } from 'vue';
-
+import { reactive } from 'vue'
+import { avatarURL } from '@/utils/index'
 const option = reactive({
-    img:'',
-    outputSize:1,
+    img: avatarURL(localStorage.getItem('avatar')!),
+    outputSize: 1,
     outputType: 'jpeg'
 })
 </script>
 
-<style scoped></style>
+<style lang="less" scoped>
+.container {
+    width: 500px;
+    height: 500px;
+}
+</style>
