@@ -5,11 +5,12 @@ import { ImageManager } from './plugins/imageManager'
 interface I_YuzuEditorPlugins {
     imageManager: ImageManager
 }
-//!编辑器主容器
-//抽象onMounted传入的ref的value的值
-export interface I_YuzuEditor {
+
+//!提供访问quillEditor提供的api
+export interface I_QuillEditor {
     getToolbar(): HTMLDivElement
     getEditor(): HTMLDivElement
+    getText(index?: number, length?: number): string
 }
 //插入元素的属性
 interface I_Attribute {
@@ -40,11 +41,12 @@ abstract class EditorCore {
 export class YuzuEditor extends EditorCore implements I_YuzuEditorPlugins {
     public imageManager: ImageManager
     //实现类需要提供ref引用的value传入来初始化
-    constructor(yuzuEditor: I_YuzuEditor) {
+    //接收quillEditor进行改造
+    constructor(public editorAPI: I_QuillEditor) {
         //这里要对两个容器进行解包
-        const toolBarContainer: HTMLDivElement = yuzuEditor.getToolbar()
+        const toolBarContainer: HTMLDivElement = editorAPI.getToolbar()
         const toolBar = toolBarContainer.querySelector('.ql-formats') as HTMLSpanElement
-        const editorContainer: HTMLDivElement = yuzuEditor.getEditor()
+        const editorContainer: HTMLDivElement = editorAPI.getEditor()
         const editor = editorContainer.querySelector('.ql-editor') as HTMLDivElement
         //初始化core
         super(toolBar, editor)

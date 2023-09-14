@@ -23,7 +23,8 @@ import hljs from 'highlight.js' //导入代码高亮文件
 import 'highlight.js/styles/monokai-sublime.css' //导入代码高亮样式
 import type { I_PublishPost, I_Post } from '@/models/modules/post/interface/index'
 import { ElMessage } from 'element-plus'
-import { useEditorPlus } from '@/hooks/useEditorPlus'
+import { type I_QuillEditor, YuzuEditor } from '@/models/modules/editor'
+import { ref, onMounted, watchEffect } from 'vue'
 
 //定义Props
 const props = withDefaults(
@@ -37,7 +38,8 @@ const props = withDefaults(
         isShowHTML: false
     }
 )
-//自定义样式
+
+//自定义编辑器样式
 //#region
 const customEditor = {
     height: props.height + 'px'
@@ -87,7 +89,22 @@ function showTip() {
     })
 }
 //升级Editor
-const { QuillEditorRef } = useEditorPlus()
+//#region
+const QuillEditorRef = ref<I_QuillEditor | null>(null)
+onMounted(() => {
+    const quillEditor = QuillEditorRef.value
+    if (quillEditor) {
+        const yuzuEditor = new YuzuEditor(quillEditor)
+        //将content的变化和preContent同步
+        watchEffect(() => {
+            props.post.content
+            const text = yuzuEditor.editorAPI.getText()
+            // eslint-disable-next-line vue/no-mutating-props
+            props.post.preContent = text.slice(0, 100)
+        })
+    }
+})
+//#endregion
 </script>
 
 <style lang="less" scoped>

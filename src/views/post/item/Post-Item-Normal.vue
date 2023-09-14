@@ -37,7 +37,7 @@
             </div>
         </h6>
         <el-divider>内容</el-divider>
-        <PostContent />
+        <PostContent :html-content="PostStore.currentPost.content"/>
         <el-divider>评论</el-divider>
         <PostComment />
     </div>

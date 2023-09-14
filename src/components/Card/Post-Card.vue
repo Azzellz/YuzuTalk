@@ -35,9 +35,8 @@
             <div class="title">{{ post.title }}</div>
             <div v-if="post.isShowContent">
                 <el-divider></el-divider>
-                <div>
-                    {{ postContent }}
-                </div>
+                <!-- 正文预览 -->
+                <el-text truncated>{{post.preContent}}</el-text>
             </div>
         </el-card>
     </router-link>
@@ -66,10 +65,6 @@ const postInfo = computed(() => {
     return props.post.isUnknown
         ? `匿名用户 发表于 ${betterFormatTime.value}`
         : `${props.post.user.user_name} 发表于 ${betterFormatTime.value}`
-})
-//postContent: 过滤后的post内容
-const postContent = computed(() => {
-    return props.post.content.substring(0, 100) + '...'
 })
 //betterFormatTime: 更好的格式化时间
 const betterFormatTime = getBetterFormatTime(props.post.format_time)

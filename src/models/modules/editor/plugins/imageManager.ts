@@ -1,8 +1,7 @@
 //!声明功能接口
-import { ServerIpAddress } from '@/api/index'
-import axios from "axios"
 import { EditorPlugin } from '.'
 import { YuzuEditor } from '..'
+import { ElMessage } from 'element-plus'
 
 //插入图片的接口
 interface I_ImageInsert {
@@ -12,10 +11,7 @@ interface I_ImageInsert {
 interface I_ImageBackShow {
     //本地回显
     backShowLocal(files: FileList): void
-    //服务器回显
-    backShowRemote(files: FileList): Promise<void>
 }
-
 //图像上传
 class ImageUploader {
     public uploader: HTMLInputElement
@@ -57,7 +53,6 @@ export class ImageManager extends EditorPlugin implements I_ImageInsert, I_Image
 
         //初始化uploader事件
         this.imageUploader.uploader.addEventListener('change', () => {
-            // this.showBackRemote(this.imageUploader.uploader.files!)
             this.backShowLocal(this.imageUploader.uploader.files!)
         })
         //初始化trigger事件
@@ -79,34 +74,46 @@ export class ImageManager extends EditorPlugin implements I_ImageInsert, I_Image
             },
             {
                 key: 'style',
-                value: 'width:50%;height:50%;'
+                value: 'margin:10px 0;'
             }
         )
     }
     //服务器回显
-    async backShowRemote(files: FileList) {
-        const imgFile = files[0]
-        const formData = new FormData()
-        formData.append('img', imgFile)
-        try {
-            //图片回显逻辑
-            //#region
-            const {
-                data: { data }
-            } = await axios.post('/api/test', formData)
-            //获取存储在服务器的文件名
-            const filename = data.filename
-            //获取静态资源路径
-            const imgUrl = `${ServerIpAddress}/post/images/${filename}`
-            this.appendImageToEditor(imgUrl)
-            //#endregion
-        } catch (error) {
-            console.log(error)
-        }
-    }
+    // async backShowRemote(files: FileList) {
+    //     const imgFile = files[0]
+    //     const formData = new FormData()
+    //     formData.append('img', imgFile)
+    //     try {
+    //         //图片回显逻辑
+    //         //#region
+    //         const {
+    //             data: { data }
+    //         } = await axios.post('/api/test', {
+    //             formData
+    //         })
+    //         //获取存储在服务器的文件名
+    //         const filename = data.filename
+    //         //获取静态资源路径
+    //         const imgUrl = `${ServerIpAddress}/post/images/${filename}`
+    //         this.appendImageToEditor(imgUrl)
+    //         //#endregion
+    //     } catch (error) {
+    //         console.log(error)
+    //     }
+    // }
     //本地回显
     backShowLocal(files: FileList) {
         const img = files[0]
+        //最大值判断
+        const maxSizeInBytes = 10 * 1024 * 1024 // 10MB
+        if (img.size > maxSizeInBytes) {
+            ElMessage.error({
+                message: '上传的图片超过10MB!',
+                offset: 80
+            })
+            return
+        }
+        //新建reader
         const reader = new FileReader()
         // 监听FileReader对象的load事件
         reader.addEventListener('load', () => {
