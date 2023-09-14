@@ -20,6 +20,7 @@ abstract class Abstract_Post implements I_Post {
         public _id: string,
         public title: string,
         public content: string,
+        public preContent: string,
         public user: I_MainUserInfo,
         public tags: Array<string>,
         public comments: Array<I_Comment>,
@@ -40,6 +41,7 @@ export class Post extends Abstract_Post {
             post._id,
             post.title,
             post.content,
+            post.preContent,
             post.user,
             post.tags,
             post.comments,
@@ -137,7 +139,7 @@ export class VisitedPosts implements I_VisitedPosts {
     recordPost(post: I_Post, FROM: POST_FROM) {
         const visitedPost: I_VisitedPost = {
             ...post,
-            FROM,
+            FROM
         }
         this.list.push(visitedPost)
     }

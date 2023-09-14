@@ -18,7 +18,7 @@
                     :name="visitedPost._id"
                 >
                     <!-- 展示缩略内容 -->
-                    <el-text truncated>{{ filterContent }}</el-text>
+                    <el-text truncated>{{ PostStore.currentPost.preContent }}</el-text>
                 </el-tab-pane>
             </el-tabs>
             <div v-else>当前还没有访问任何post哦!</div>
