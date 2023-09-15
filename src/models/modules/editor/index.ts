@@ -1,5 +1,7 @@
 //!插件列表
+import type { Quill } from '@vueup/vue-quill'
 import { ImageManager } from './plugins/imageManager'
+import { EditorPlugin } from './plugins/index'
 
 //将需要实现的功能插件放到这里做约束
 interface I_YuzuEditorPlugins {
@@ -7,10 +9,13 @@ interface I_YuzuEditorPlugins {
 }
 
 //!提供访问quillEditor提供的api
-export interface I_QuillEditor {
+export interface I_QuillEditorAPI {
     getToolbar(): HTMLDivElement
     getEditor(): HTMLDivElement
+    //这个api有限制,只能获取已编辑的内容
     getText(index?: number, length?: number): string
+    getHTML(): string
+    getQuill(): Quill
 }
 //插入元素的属性
 interface I_Attribute {
@@ -37,12 +42,27 @@ abstract class EditorCore {
         p.appendChild(childTag)
         this.editor.appendChild(p)
     }
+    //!触发编辑器更新, 用来修复初次进入editor,getText获取不到内容
+    triggerEditorUpdate() {
+        //插入再删除一个标签可以触发编辑器重新渲染
+        const p = document.createElement('p')
+        this.editor.appendChild(p)
+        this.editor.removeChild(p)
+    }
 }
-export class YuzuEditor extends EditorCore implements I_YuzuEditorPlugins {
+//管理插件
+export class EditorPlugins implements I_YuzuEditorPlugins {
     public imageManager: ImageManager
+    constructor(yuzuEditor: YuzuEditor) {
+        this.imageManager = new ImageManager(yuzuEditor)
+    }
+}
+export class YuzuEditor extends EditorCore {
+    //!初始化插件
+    public plugins: EditorPlugins = new EditorPlugins(this)
     //实现类需要提供ref引用的value传入来初始化
     //接收quillEditor进行改造
-    constructor(public editorAPI: I_QuillEditor) {
+    constructor(public editorAPI: I_QuillEditorAPI) {
         //这里要对两个容器进行解包
         const toolBarContainer: HTMLDivElement = editorAPI.getToolbar()
         const toolBar = toolBarContainer.querySelector('.ql-formats') as HTMLSpanElement
@@ -50,8 +70,5 @@ export class YuzuEditor extends EditorCore implements I_YuzuEditorPlugins {
         const editor = editorContainer.querySelector('.ql-editor') as HTMLDivElement
         //初始化core
         super(toolBar, editor)
-        //初始化各插件
-        //把当前实例传入各插件的构造函数,即可实现单例
-        this.imageManager = new ImageManager(this)
     }
 }
