@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="container" :class="autoFitClass">
         <div class="recent-posts">
             <h1 style="text-align: center">最新</h1>
             <el-scrollbar>
@@ -53,6 +53,10 @@ import PostCard from '@/components/Card/Post-Card.vue'
 import { usePostStore } from '@/stores/modules/post'
 import { useUserStore } from '@/stores/modules/user'
 import { POST_FROM } from '@/models/modules/post/enum'
+import { useAutoFitClass } from '@/hooks/useAutoFitClass'
+
+//根据路由动态展示css类
+const { autoFitClass } = useAutoFitClass()
 
 //初始化数据
 //#region
@@ -75,7 +79,6 @@ try {
 
 <style lang="less" scoped>
 .container {
-    margin-top: 60px;
     padding: 50px;
     display: flex;
     .recent-posts {

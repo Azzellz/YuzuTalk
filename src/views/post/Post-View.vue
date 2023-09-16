@@ -1,21 +1,13 @@
 <template>
-  <router-view :class="autoFit"></router-view>
+    <router-view :class="autoFitClass"></router-view>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import { useRoute } from 'vue-router'
-import {  usePostStore } from '@/stores/modules/post'
+import { usePostStore } from '@/stores/modules/post'
+import { useAutoFitClass } from '@/hooks/useAutoFitClass'
+
 //根据路由动态展示css类
-//#region
-const route = useRoute()
-const autoFit = computed(() => {
-  if (route.meta.isHideAside && route.meta.isHideHeader) return ''
-  else if (route.meta.isHideAside) return 'without-aside'
-  else if (route.meta.isHideHeader) return 'without-header'
-  else return 'with-aside-header'
-})
-//#endregion
+const { autoFitClass } = useAutoFitClass()
 
 //初始化逻辑放到路由中转组件这里做
 //初始化Post数据
@@ -25,23 +17,12 @@ const PostStore = usePostStore()
 const option = PostStore.getOption()
 //这边既是为了获取初始化数据,也是为了防止刷新后数据丢失
 try {
-  await PostStore.getPosts(option)
+    await PostStore.getPosts(option)
 } catch (error) {
-  console.log(error)
+    console.log(error)
 }
 
 //#endregion
 </script>
 
-<style scoped>
-.with-aside-header {
-  margin-top: 60px;
-  margin-left: 100px;
-}
-.without-aside {
-  margin-top: 60px;
-}
-.without-header {
-  margin-left: 100px;
-}
-</style>
+<style scoped></style>

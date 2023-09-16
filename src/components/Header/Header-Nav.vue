@@ -39,6 +39,11 @@
             </el-icon>
         </el-menu-item>
 
+        <el-menu-item index="/develop">
+            开发
+            <el-icon><Present /></el-icon>
+        </el-menu-item>
+
         <el-menu-item index="/user/info">
             <el-avatar :size="40" :src="avatarURL(userAvatar)"></el-avatar>
         </el-menu-item>

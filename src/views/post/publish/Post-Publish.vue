@@ -56,6 +56,7 @@ import { PostAPI } from '@/api/modules/post';
 const post: I_PublishPost = reactive({
     title: '',
     content: '',
+    preContent:'',
     comments: [],
     support: 0,
     oppose: 0,

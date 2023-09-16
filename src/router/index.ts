@@ -13,7 +13,7 @@ const router = createRouter({
             component: () => import('@/views/door/Door-View.vue'),
             meta: {
                 isHideHeader: true,
-                isHideAside:true
+                isHideAside: true
             },
             beforeEnter: () => {
                 //在这里判断是否已经有token,如果有则直接导航到首页
@@ -22,6 +22,14 @@ const router = createRouter({
                 } else {
                     return true
                 }
+            }
+        },
+        {
+            //开发界面,用于开发新功能
+            path: '/develop',
+            component: () => import('@/views/develop/Develop-View.vue'),
+            meta: {
+                isHideAside: true
             }
         },
         {
@@ -66,7 +74,7 @@ const router = createRouter({
                         //query中的数据都是字符串类型,而我们需要的是数字类型(除了id是字符串类型)
                         return {
                             id: String($route.query.id),
-                            FROM: Number($route.query.FROM),
+                            FROM: Number($route.query.FROM)
                         }
                     }
                 }
@@ -88,8 +96,8 @@ const router = createRouter({
                     component: () => import('@/views/user/info/User-Info.vue')
                 },
                 {
-                    path:'find',
-                    component:()=>import('@/views/user/find/Find-Other.vue')
+                    path: 'find',
+                    component: () => import('@/views/user/find/Find-Other.vue')
                 },
                 {
                     path: 'other',

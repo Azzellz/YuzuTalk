@@ -1,6 +1,6 @@
 {
   "name": "yuzutalk",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "vite",
@@ -23,6 +23,7 @@
     "pinia": "^2.1.4",
     "prismjs": "^1.29.0",
     "vue": "^3.3.4",
+    "vue-cropper": "^1.1.1",
     "vue-router": "^4.2.4"
   },
   "devDependencies": {

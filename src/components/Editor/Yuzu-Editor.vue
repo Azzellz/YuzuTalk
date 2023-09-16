@@ -1,7 +1,7 @@
 <!-- eslint-disable vue/no-mutating-props -->
 <!-- 这里就是要修改Props的 -->
 <template>
-    <div class="base-editor-container" :style="customEditor" @keydown.ctrl.v="showTip">
+    <div class="base-editor-container" :style="customEditor">
         <QuillEditor
             ref="QuillEditorRef"
             content-type="html"
@@ -22,7 +22,8 @@ import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import hljs from 'highlight.js' //导入代码高亮文件
 import 'highlight.js/styles/monokai-sublime.css' //导入代码高亮样式
 import type { I_PublishPost, I_Post } from '@/models/modules/post/interface/index'
-import { ElMessage } from 'element-plus'
+import { type I_QuillEditorAPI, YuzuEditor } from '@/models/modules/editor'
+import { ref, onMounted, watchEffect, watch } from 'vue'
 
 //定义Props
 const props = withDefaults(
@@ -36,7 +37,8 @@ const props = withDefaults(
         isShowHTML: false
     }
 )
-//自定义样式
+
+//自定义编辑器样式
 //#region
 const customEditor = {
     height: props.height + 'px'
@@ -50,12 +52,15 @@ hljs.configure({
     //注册语言
     languages: ['javascript', 'typescript', 'ruby', 'python', 'c', 'cpp', 'java', 'html', 'css']
 })
+//highlight完成后会触发更新
+const highlightReadyFlag = ref(0)
 //编辑器配置
 const options = {
     modules: {
         syntax: {
-            //即时渲染
+            //即时语法高亮
             highlight: (text: string) => {
+                highlightReadyFlag.value++
                 return hljs.highlightAuto(text).value
             }
         },
@@ -78,13 +83,32 @@ const options = {
     placeholder: '...',
     theme: 'snow'
 }
-//展示可能出现的bug的提示
-function showTip() {
-    ElMessage.warning({
-        message: '粘贴后会出现样式丢失,触发编辑器输入后解决',
-        offset: 80
-    })
-}
+//升级Editor
+//#region
+//获取模板引用
+const QuillEditorRef = ref<I_QuillEditorAPI | null>(null)
+onMounted(() => {
+    const quillEditor = QuillEditorRef.value
+    if (quillEditor) {
+        //升级
+        const yuzuEditor = new YuzuEditor(quillEditor)
+        //高亮完毕后触发post.content同步
+        watch(highlightReadyFlag, () => {
+            // eslint-disable-next-line vue/no-mutating-props
+            props.post.content = yuzuEditor.editorAPI.getHTML()
+        })
+        //将content的变化和preContent同步
+        watchEffect(() => {
+            props.post.content
+            setTimeout(() => {
+                //getText要延时调用,不然会获取不到
+                const text = yuzuEditor.editorAPI.getText()
+                // eslint-disable-next-line vue/no-mutating-props
+                props.post.preContent = text.slice(0, 100)
+            }, 100)
+        })
+    }
+})
 //#endregion
 </script>
 

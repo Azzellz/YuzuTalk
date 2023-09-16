@@ -6,6 +6,7 @@ export interface I_Post {
     _id: string //id,由服务端生成
     title: string //标题
     content: string //正文
+    preContent: string //正文预览
     user: I_MainUserInfo //主要的用户信息
     tags: Array<string> //标签
     comments: Array<I_Comment> //评论
@@ -23,6 +24,7 @@ export interface I_Post {
 export interface I_PublishPost {
     title: string //标题
     content: string //正文
+    preContent:string //正文预览
     tags: Array<string> //标签
     //发布时只需要初始化,所以不需要很细的接口限制
     comments: Array<I_Comment> //评论
