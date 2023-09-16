@@ -1,7 +1,6 @@
 //!插件列表
 import type { Quill } from '@vueup/vue-quill'
 import { ImageManager } from './plugins/imageManager'
-import { EditorPlugin } from './plugins/index'
 
 //将需要实现的功能插件放到这里做约束
 interface I_YuzuEditorPlugins {
@@ -12,7 +11,7 @@ interface I_YuzuEditorPlugins {
 export interface I_QuillEditorAPI {
     getToolbar(): HTMLDivElement
     getEditor(): HTMLDivElement
-    //这个api有限制,只能获取已编辑的内容
+    //!这个api有限制,需要延迟调用
     getText(index?: number, length?: number): string
     getHTML(): string
     getQuill(): Quill
